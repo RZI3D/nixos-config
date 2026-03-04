@@ -1,8 +1,5 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 
-let
-  mkt = inputs.vscode-extensions.extensions.${pkgs.system}.vscode-marketplace;
-in
 {
   # 1. System Packages (The stuff you wanted in every flake)
   home.packages = with pkgs; [
@@ -15,60 +12,59 @@ in
   # 2. VSCode Configuration
   programs.vscode = {
     enable = true;
-    package = pkgs.vscode;
 
-    extensions = [
+  extensions = pkgs.nix4vscode.forVscode [
       # Bierner's Markdown Suite
-      mkt.bierner.color-info
-      mkt.bierner.markdown-checkbox
-      mkt.bierner.markdown-emoji
-      mkt.bierner.markdown-footnotes
-      mkt.bierner.markdown-mermaid
+      "bierner.color-info"
+      "bierner.markdown-checkbox"
+      "bierner.markdown-emoji"
+      "bierner.markdown-footnotes"
+      "bierner.markdown-mermaid"
 
       # Appearance & UI
-      mkt.catppuccin.catppuccin-vsc
-      mkt.t3dotgg.vsc-material-theme-but-i-wont-sue-you
-      mkt.phu1237.vs-browser
+      "catppuccin.catppuccin-vsc"
+      "t3dotgg.vsc-material-theme-but-i-wont-sue-you"
+      "phu1237.vs-browser"
 
       # Languages & Tools
-      mkt.charliermarsh.ruff
-      mkt.codezombiech.gitignore
-      mkt.michelemelluso.gitignore
-      mkt.dart-code.dart-code
-      mkt.dart-code.flutter
-      mkt.geequlim.godot-tools
-      mkt.redhat.vscode-yaml
-      mkt.swiftlang.swift-vscode
-      mkt.llvm-vs-code-extensions.lldb-dap
+      "charliermarsh.ruff"
+      "codezombiech.gitignore"
+      "michelemelluso.gitignore"
+      "dart-code.dart-code"
+      "dart-code.flutter"
+      "geequlim.godot-tools"
+      "redhat.vscode-yaml"
+      "swiftlang.swift-vscode"
+      "llvm-vs-code-extensions.lldb-dap"
 
       # Python Stack
-      mkt.ms-python.python
-      mkt.ms-python.debugpy
-      mkt.ms-python.vscode-pylance
-      mkt.ms-python.vscode-python-envs
+      "ms-python.python"
+      "ms-python.debugpy"
+      "ms-python.vscode-pylance"
+      "ms-python.vscode-python-envs"
 
       # Git & GitHub
-      mkt.donjayamanne.githistory
-      mkt.mhutchie.git-graph
-      mkt.github.codespaces
-      mkt.github.remotehub
-      mkt.github.vscode-github-actions
-      mkt.github.vscode-pull-request-github
+      "donjayamanne.githistory"
+      "mhutchie.git-graph"
+      "github.codespaces"
+      "github.remotehub"
+      "github.vscode-github-actions"
+      "github.vscode-pull-request-github"
 
       # AI & Remote
-      mkt.google.gemini-cli-vscode-ide-companion
-      mkt.google.geminicodeassist
-      mkt.kilocode.kilo-code
-      mkt.ms-azuretools.vscode-containers
-      mkt.ms-vscode-remote.remote-containers
-      mkt.ms-vscode.remote-explorer
-      mkt.ms-vscode.remote-repositories
-      mkt.ms-vscode.remote-server
-      mkt.ms-vscode.vscode-github-issue-notebooks
-      mkt.ms-vsliveshare.vsliveshare
+      "google.gemini-cli-vscode-ide-companion"
+      "google.geminicodeassist"
+      "kilocode.kilo-code"
+      "ms-azuretools.vscode-containers"
+      "ms-vscode-remote.remote-containers"
+      "ms-vscode.remote-explorer"
+      "ms-vscode.remote-repositories"
+      "ms-vscode.remote-server"
+      "ms-vscode.vscode-github-issue-notebooks"
+      "ms-vsliveshare.vsliveshare"
 
       # Formatting
-      mkt.esbenp.prettier-vscode
+      "esbenp.prettier-vscode"
     ];
 
     userSettings = {
