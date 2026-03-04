@@ -12,7 +12,7 @@
   # 2. VSCode Configuration
   programs.vscode = {
     enable = true;
-
+  profiles.default = {
   extensions = pkgs.nix4vscode.forVscode [
       # Bierner's Markdown Suite
       "bierner.color-info"
@@ -72,5 +72,6 @@
       "editor.formatOnSave" = true;
       "window.titleBarStyle" = "custom";
     };
+  };
   };
 }
