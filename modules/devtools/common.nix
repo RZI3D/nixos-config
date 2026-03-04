@@ -1,8 +1,7 @@
 { pkgs, inputs, ... }:
 
 let
-  # This reaches out to the flake input to grab the marketplace
-  mkt = inputs.vscode-extensions.extensions.${system}.vscode-marketplace;
+  mkt = inputs.vscode-extensions.extensions.${pkgs.system}.vscode-marketplace;
 in
 {
   # 1. System Packages (The stuff you wanted in every flake)
