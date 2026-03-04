@@ -55,8 +55,9 @@
             home.username = "zackariyyasattaur";
             home.homeDirectory = "/home/zackariyyasattaur";
             home.stateVersion = "24.11";
-          home-manager.users.zackariyyasattaur = import ./modules/desktop/rzi-hypr.nix;
-        }
+            home-manager.users.zackariyyasattaur = import ./modules/desktop/rzi-hypr.nix;
+          };
+        };
       ];
     };
   };
