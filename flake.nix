@@ -24,7 +24,7 @@
           (final: prev: {
             pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
               (python-final: python-prev: {
-                kde-material-you-colors = python-final.callPackage ./kde-material-fix.nix { };
+                kde-material-you-colors = python-final.callPackage ./pkgs/kde-material-you-colors/default.nix { };
               })
             ];
           })

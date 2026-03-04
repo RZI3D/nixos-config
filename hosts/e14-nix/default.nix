@@ -79,7 +79,7 @@
   services.upower.enable = true;   # Battery info
   services.geoclue2.enable = true; # Night light/location
   services.gvfs.enable = true;     # File manager mounting
-
+  services.dbus.enable = true;
   # Necessary for his AGS/Quickshell widgets
   fonts.packages = with pkgs; [
     rubik
@@ -96,14 +96,9 @@
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
-    # END4'S DOTFILE PRERESIQUIRES
-    quickshell      # The engine replacing AGS
-    hyprland
-
-    # The Theming Engine
-    matugen         # Essential: generates colors from wallpaper
+    git
     python3         # Used for various scripts
-
+    kdePackages.plasma-workspace-wallpapers
     # Desktop Components
     swww            # Wallpaper daemon
     pywal           # Often used as a fallback for colors

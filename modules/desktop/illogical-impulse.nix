@@ -11,7 +11,7 @@
   };
   home.packages = with pkgs; [
     hyprland
-
+    bibata-cursors
     # The Theming Engine
     matugen         # Essential: generates colors from wallpaper
 
