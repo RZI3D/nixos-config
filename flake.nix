@@ -25,6 +25,8 @@
             home.stateVersion = "24.11";
             imports = [
               ./modules/desktop/caelestia.nix
+              inputs.caelestia-shell.homeManagerModules.default
+              ./modules/devtools/common.nix
             ];
           };
         }
