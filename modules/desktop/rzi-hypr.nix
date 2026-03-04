@@ -7,7 +7,7 @@
     waybar          # Status bar
     dunst           # Notifications
     kitty           # Terminal
-    rofi-wayland    # App launcher
+    rofi    # App launcher
   ];
 
   # 2. Tell Home Manager to manage Hyprland
