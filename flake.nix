@@ -43,10 +43,15 @@
         }
       ];
     };
-    nixosConfigurations.rzi-config = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
+    nixosConfigurations.rzi-hypr = nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
+    specialArgs = { inherit inputs; };
+    modules = [
       ./hosts/e14-nix/default.nix
+      {
+        nixpkgs.overlays = [ nix4vscode.overlays.default ];
+        nixpkgs.config.allowUnfree = true;
+      }
         home-manager.nixosModules.home-manager {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
@@ -55,7 +60,10 @@
             home.username = "zackariyyasattaur";
             home.homeDirectory = "/home/zackariyyasattaur";
             home.stateVersion = "24.11";
-            home-manager.users.zackariyyasattaur = import ./modules/desktop/rzi-hypr.nix;
+            imports = [
+              ./modules/desktop/rzi-hypr.nix
+              ./modules/devtools/common.nix
+            ];
           };
         }
       ];
