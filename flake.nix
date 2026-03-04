@@ -10,8 +10,8 @@
       url = "github:caelestia-dots/shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions";
+    nix4vscode = { 
+      url = "github:nix-community/nix4vscode";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -22,6 +22,10 @@
     specialArgs = { inherit inputs; };
     modules = [
       ./hosts/e14-nix/default.nix
+      {
+        nixpkgs.overlays = [ nix4vscode.overlays.default ];
+        nixpkgs.config.allowUnfree = true;
+      }
         home-manager.nixosModules.home-manager {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
