@@ -57,7 +57,7 @@
             home.stateVersion = "24.11";
             home-manager.users.zackariyyasattaur = import ./modules/desktop/rzi-hypr.nix;
           };
-        };
+        }
       ];
     };
   };
