@@ -64,12 +64,18 @@
   users.users.zackariyyasattaur = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
-
+    hashedPassword = "$6$rkp83G7XDj8weVI9$hEwyG/13SqUrYvIQc3ZT7/vpvEAGDRvHew47DM2w0Lw44xxVC8YXqHUlNUxEX0VxIdRq6fivmWILvrsODXVoA/";
   };
 
   programs.firefox.enable = true;
+  # Enable the X11 windowing system (needed for SDDM even on Wayland)
+  services.xserver.enable = true;
+
+  # Enable SDDM and Hyprland
+  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
   programs.hyprland.enable = true;
-  # end4's dots rely heavily on these services
+
   services.upower.enable = true;   # Battery info
   services.geoclue2.enable = true; # Night light/location
   services.gvfs.enable = true;     # File manager mounting

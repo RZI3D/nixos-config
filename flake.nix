@@ -18,7 +18,7 @@
     nixosConfigurations.end4-config = nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     modules = [
-      ./configuration.nix
+      ./hosts/e14-nix/default.nix
       ({ pkgs, ... }: {
         nixpkgs.overlays = [
           (final: prev: {
@@ -39,7 +39,7 @@
             home.stateVersion = "24.11";
             imports = [
               illogical-flake.homeManagerModules.default
-              ./illogical-impulse.nix
+              ./modules/desktop/illogical-impulse.nix
             ];
           };
         }
@@ -48,7 +48,7 @@
     nixosConfigurations.rzi-config = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        ./configuration.nix
+      ./hosts/e14-nix/default.nix
         home-manager.nixosModules.home-manager {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
