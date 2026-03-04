@@ -16,7 +16,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, caelestia-shell, ... }@inputs: {
+  outputs = { self, nixpkgs, home-manager, caelestia-shell, nix4vscode, ... }@inputs: {
     nixosConfigurations.caelestia = nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     specialArgs = { inherit inputs; };
