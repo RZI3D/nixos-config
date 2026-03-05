@@ -14,9 +14,13 @@
       url = "github:nix-community/nix4vscode";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    firefox-addons = {
+      url = "github:nix-community/firefox-addons";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, caelestia-shell, nix4vscode, ... }@inputs: {
+  outputs = { self, nixpkgs, home-manager, caelestia-shell, nix4vscode, firefox-addons, ... }@inputs: {
     nixosConfigurations.caelestia = nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     specialArgs = { inherit inputs; };
@@ -38,6 +42,7 @@
               ./modules/desktop/caelestia.nix
               inputs.caelestia-shell.homeManagerModules.default
               ./modules/devtools/common.nix
+              ./modules/productivity/browsers.nix
             ];
           };
         }
