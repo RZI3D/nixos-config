@@ -31,7 +31,6 @@
         DisableFirefoxStudies = true;
         DisablePocket = true;
         OfferToSaveLogins = false; # Bitwarden
-    };
 
     };
 
