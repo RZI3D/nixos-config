@@ -38,8 +38,7 @@
               ./modules/desktop/caelestia.nix
               inputs.caelestia-shell.homeManagerModules.default
               ./modules/devtools/common.nix
-              ./modules/productivity/browsers.nix
-            ];
+              ./modules/productivity/            ];
           };
         }
       ];

@@ -80,8 +80,9 @@
   services.geoclue2.enable = true; # Night light/location
   services.gvfs.enable = true;     # File manager mounting
   services.dbus.enable = true;
-  # Necessary for his AGS/Quickshell widgets
-  fonts.packages = with pkgs; [
+  security.pam.services.login.kwallet.enable = true;
+
+fonts.packages = with pkgs; [
     rubik
     nerd-fonts.ubuntu
     nerd-fonts.jetbrains-mono
