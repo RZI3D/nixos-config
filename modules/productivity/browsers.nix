@@ -5,7 +5,7 @@
     enable = true;
     
     # This applies settings to ALL profiles
-    programs.firefox.policies = {
+    policies = {
       ExtensionSettings = with builtins;
         let extension = shortId: uuid: {
           name = uuid;
