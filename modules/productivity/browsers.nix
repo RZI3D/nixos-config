@@ -26,7 +26,6 @@
         # run `jq .browser_specific_settings.gecko.id manifest.json` or
         # `jq .applications.gecko.id manifest.json` to get the UUID
     };
-  };
 
     profiles.zackariyya = {
       isDefault = true;
