@@ -25,6 +25,14 @@
         # Then, download the XPI by filling it in to the install_url template, unzip it,
         # run `jq .browser_specific_settings.gecko.id manifest.json` or
         # `jq .applications.gecko.id manifest.json` to get the UUID
+
+
+        DisableTelemetry = true;
+        DisableFirefoxStudies = true;
+        DisablePocket = true;
+        OfferToSaveLogins = false; # Bitwarden
+    };
+
     };
 
     profiles.zackariyya = {
