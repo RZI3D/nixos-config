@@ -1,6 +1,7 @@
 { pkgs, ... }:
 
 {
+  wayland.windowManager.hyprland.enable = true;
 	programs.caelestia = {
 	  enable = true;
 	  systemd = {
