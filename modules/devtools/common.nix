@@ -3,7 +3,6 @@
 {
   # 1. System Packages (The stuff you wanted in every flake)
   home.packages = with pkgs; [
-    git
     gh
     htop
     nil # Nix Language Server
@@ -29,7 +28,6 @@
       # Languages & Tools
       "charliermarsh.ruff"
       "codezombiech.gitignore"
-      "michelemelluso.gitignore"
       "dart-code.dart-code"
       "dart-code.flutter"
       "geequlim.godot-tools"
