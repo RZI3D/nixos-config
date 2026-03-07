@@ -6,10 +6,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    caelestia-shell = {
-      url = "github:caelestia-dots/shell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     caelestia-dotfiles = {
       url = "github:Xellor-Dev/caelestia-nixos";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -20,7 +16,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, caelestia-shell, nix4vscode, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, caelestia-dotfiles, nix4vscode, ... }@inputs:
     let
       mkSystem = { homeModules }: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
