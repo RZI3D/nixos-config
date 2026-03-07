@@ -49,7 +49,6 @@
       nixosConfigurations.caelestia = mkSystem {
         homeModules = [
           ./modules/desktop/caelestia.nix
-          inputs.caelestia-shell.homeManagerModules.default
           inputs.caelestia-dotfiles.homeManagerModules.default
           ./modules/devtools/common.nix
           ./modules/productivity
