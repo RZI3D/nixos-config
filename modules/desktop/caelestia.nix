@@ -1,7 +1,6 @@
 { pkgs, ... }:
 
 {
-  wayland.windowManager.hyprland.enable = true;
 	programs.caelestia = {
 	  enable = true;
 	  systemd = {
@@ -21,5 +20,10 @@
 	      theme.enableGtk = true;
 	    };
 	  };
+	};
+	programs.caelestia-dots = {
+	  enable = true;
+	  hypr.enable = true;
+	  term.enable = true;   # foot terminal config
 	};
 }

@@ -10,6 +10,10 @@
       url = "github:caelestia-dots/shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    caelestia-dotfiles = {
+      url = "github:Xellor-Dev/caelestia-nixos";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix4vscode = {
       url = "github:nix-community/nix4vscode";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -46,6 +50,7 @@
         homeModules = [
           ./modules/desktop/caelestia.nix
           inputs.caelestia-shell.homeManagerModules.default
+          inputs.caelestia-dotfiles.homeManagerModules.default
           ./modules/devtools/common.nix
           ./modules/productivity
         ];
