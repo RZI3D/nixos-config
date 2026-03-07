@@ -13,7 +13,7 @@
     pixelorama    # Pixel art editor (free alternative to aseprite)
 
     # Video & Recording
-    kdenlive
+    kdePackages.kdenlive
     obs-studio
 
     # Photo Processing
