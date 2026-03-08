@@ -1,29 +1,18 @@
 { pkgs, ... }:
 
 {
-	programs.caelestia = {
-	  enable = true;
-	  systemd = {
-	    enable = true; # if you prefer starting from your compositor
-	    target = "graphical-session.target";
-	    environment = [];
-	  };
-	  settings = {
-	    bar.status = {
-	      showBattery = true;
-	    };
-	    paths.wallpaperDir = "~/Pictures/Wallpapers";
-	  };
-	  cli = {
-	    enable = true; # Also add caelestia-cli to path
-	    settings = {
-	      theme.enableGtk = true;
-	    };
-	  };
-	};
-	programs.caelestia-dots = {
-	  enable = true;
-	  hypr.enable = true;
-	  term.enable = true;   # foot terminal config
-	};
+  programs.caelestia-dots = {
+    enable = true;
+    hypr.enable = true;
+    term.enable = true;
+    btop.enable = true;
+    foot.enable = true;
+    caelestia.enable = true; # shell + CLI, already default true but explicit is fine
+
+    # Customize shell settings through here instead of programs.caelestia
+    caelestia.shell.settings = {
+      bar.status.showBattery = true;
+      paths.wallpaperDir = "~/Pictures/Wallpapers";
+    };
+  };
 }
