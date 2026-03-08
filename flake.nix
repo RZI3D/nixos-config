@@ -7,7 +7,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     caelestia-dotfiles = {
-      url = "github:Xellor-Dev/caelestia-nixos";
+      url = "github:RZI3D/caelestia-nixos";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix4vscode = {
