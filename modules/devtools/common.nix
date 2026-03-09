@@ -51,7 +51,6 @@
 
       # AI & Remote
       "google.gemini-cli-vscode-ide-companion"
-      "google.geminicodeassist"
       "kilocode.kilo-code"
       "ms-azuretools.vscode-containers"
       "ms-vscode-remote.remote-containers"
