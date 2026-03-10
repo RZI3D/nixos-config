@@ -14,9 +14,17 @@
       url = "github:nix-community/nix4vscode";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    quickshell = {
+      url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    catppuccin = {
+      url = "github:catppuccin/nix";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, caelestia-shell, nix4vscode, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, caelestia-shell, nix4vscode, quickshell, catppuccin, ... }@inputs:
     let
       mkSystem = { homeModules }: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -50,9 +58,9 @@
           ./modules/productivity
         ];
       };
-
       nixosConfigurations.rzi-hypr = mkSystem {
         homeModules = [
+          catppuccin.homeModules.catppuccin
           ./modules/desktop/rzi-hypr.nix
           ./modules/devtools/common.nix
         ];

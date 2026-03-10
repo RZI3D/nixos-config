@@ -47,6 +47,7 @@ in
       paths.wallpaperDir = "~/Pictures/Wallpapers";
       general.apps = {
         terminal = ["kitty"];
+        browser  = ["firefox"];
         explorer = ["thunar"];
       };
     };

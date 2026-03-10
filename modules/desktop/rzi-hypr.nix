@@ -1,62 +1,210 @@
-{ pkgs, ... }:
+{ inputs, pkgs, config, ... }:
 
 {
-  # 1. Install the packages needed for your custom desktop
+  # ── Catppuccin global theme ─────────────────────────────────────────────────
+  catppuccin.flavor = "mocha";
+  catppuccin.accent = "mauve";
+
+  # ── Packages ─────────────────────────────────────────────────────────────────
   home.packages = with pkgs; [
-    swww            # Wallpaper
-    waybar          # Status bar
-    dunst           # Notifications
-    kitty           # Terminal
-    rofi    # App launcher
+    inputs.quickshell.packages.${pkgs.system}.quickshell
+    (callPackage ../../pkgs/rzi-shell {})
+
+    # Wallpaper
+    swww
+
+    # Media / HW controls (used by quickshell widgets)
+    playerctl
+    brightnessctl
+    wireplumber      # wpctl for volume
+
+    # Screenshot
+    grimblast
+    wl-clipboard
+
+    # Utility
+    libnotify        # notify-send (for testing notifications)
   ];
 
-  # 2. Tell Home Manager to manage Hyprland
+  # ── Kitty terminal (Catppuccin via HM module) ────────────────────────────────
+  programs.kitty = {
+    enable = true;
+    settings = {
+      font_family          = "JetBrainsMono Nerd Font";
+      font_size            = "12.0";
+      window_padding_width = 12;
+      background_opacity   = "0.92";
+      confirm_os_window_close = 0;
+    };
+  };
+
+  # ── GTK & QT theming ──────────────────────────────────────────────────────────────
+  #catppuccin.gtk = {
+  #  enable = true;
+  #  tweaks = [ "rimless" ];
+  #};
+  #qt = {
+  #  enable = true;
+  #  platformTheme.name = "gtk";
+  #  style.name = "kvantum";
+  #};
+
+  # ── Cursor ───────────────────────────────────────────────────────────────────
+  home.pointerCursor = {
+    name    = "catppuccin-mocha-mauve-cursors";
+    package = pkgs.catppuccin-cursors.mochaMauve;
+    size    = 24;
+    gtk.enable = true;
+  };
+
+  # ── Hyprland ─────────────────────────────────────────────────────────────────
   wayland.windowManager.hyprland = {
     enable = true;
-    # This is where your custom config goes!
-    settings = {
-      # This looks like standard Hyprland config, but in Nix syntax
-      "monitor" = ",preferred,auto,1";
 
-      "exec-once" = [
-        "swww init"
-        "waybar"
+    settings = {
+      monitor = ",preferred,auto,1";
+
+      exec-once = [
+        "swww-daemon"
+        "swww img ~/Pictures/Wallpapers/nix-hex.jpg --transition-type grow --transition-pos center"
+        "quickshell"
       ];
 
-      "input" = {
-        "kb_layout" = "us";
-        "follow_mouse" = 1;
-        "touchpad" = {
-          "natural_scroll" = false;
+      general = {
+        gaps_in  = 5;
+        gaps_out = 12;
+        border_size = 2;
+        "col.active_border"   = "rgb(cba6f7) rgb(89b4fa) 45deg"; # mauve → blue
+        "col.inactive_border" = "rgb(313244)";
+        layout = "dwindle";
+      };
+
+      decoration = {
+        rounding = 12;
+        blur = {
+          enabled = true;
+          size    = 8;
+          passes  = 2;
+          popups  = true;
+        };
+        shadow = {
+          enabled = true;
+          range   = 20;
+          color   = "rgba(1e1e2eCC)";
         };
       };
 
-      "general" = {
-        "gaps_in" = 5;
-        "gaps_out" = 10;
-        "border_size" = 2;
-        "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
-        "layout" = "dwindle";
+      animations = {
+        enabled = true;
+        bezier = [
+          "easeOut, 0.16, 1, 0.3, 1"
+          "spring, 0.68, -0.55, 0.27, 1.55"
+        ];
+        animation = [
+          "windows,    1, 5, spring, popin 80%"
+          "windowsOut, 1, 4, easeOut, popin 80%"
+          "fade,       1, 4, easeOut"
+          "workspaces, 1, 5, easeOut, slide"
+          "border,     1, 6, default"
+        ];
       };
 
-      "decoration" = {
-        "rounding" = 10;
-        "blur" = {
-          "enabled" = true;
-          "size" = 3;
-        };
+      input = {
+        kb_layout = "us";
+        follow_mouse = 1;
+        touchpad.natural_scroll = true;
+        touchpad.tap-to-click   = true;
       };
 
-      # Keybinds (Nix lists use [ ] and space separation)
+      dwindle = {
+        pseudotile     = true;
+        preserve_split = true;
+      };
+
+      misc = {
+        disable_hyprland_logo   = true;
+        disable_splash_rendering = true;
+        animate_manual_resizes  = true;
+      };
+
+      # Allow quickshell layers to blur properly
+      layerrule = [
+        "blur, quickshell"
+        "ignorezero, quickshell"
+        "blur, quickshell:*"
+        "ignorezero, quickshell:*"
+      ];
+
+      windowrule = [
+        "float, class:pavucontrol"
+        "float, class:nm-connection-editor"
+        "float, title:^(Picture-in-Picture)$"
+      ];
+
       "$mod" = "SUPER";
-      "bind" = [
-        "$mod, Q, exec, kitty"
-        "$mod, C, killactive,"
-        "$mod, M, exit,"
-        "$mod, E, exec, dolphin"
-        "$mod, V, togglefloating,"
-        "$mod, R, exec, rofi -show drun"
+
+      bind = [
+        "$mod, Return, exec, kitty"
+        "$mod, Q, killactive"
+        "$mod, F, fullscreen"
+        "$mod, V, togglefloating"
+        "$mod, P, exec, hyprpicker -a"         # color picker
+        "$mod, S, exec, grimblast copy area"   # screenshot
+        "$mod SHIFT, S, exec, grimblast save area ~/Pictures/Screenshots/$(date +%F_%T).png"
+
+        # Focus
+        "$mod, left,  movefocus, l"
+        "$mod, right, movefocus, r"
+        "$mod, up,    movefocus, u"
+        "$mod, down,  movefocus, d"
+        "$mod, H, movefocus, l"
+        "$mod, L, movefocus, r"
+        "$mod, K, movefocus, u"
+        "$mod, J, movefocus, d"
+
+        # Move
+        "$mod SHIFT, left,  movewindow, l"
+        "$mod SHIFT, right, movewindow, r"
+        "$mod SHIFT, up,    movewindow, u"
+        "$mod SHIFT, down,  movewindow, d"
+      ] ++ (
+        builtins.concatLists (builtins.genList (i:
+          let ws = toString (i + 1); in [
+            "$mod, ${ws}, workspace, ${ws}"
+            "$mod SHIFT, ${ws}, movetoworkspace, ${ws}"
+          ]
+        ) 9)
+      );
+
+      # Mouse binds
+      bindm = [
+        "$mod, mouse:272, movewindow"
+        "$mod, mouse:273, resizewindow"
+      ];
+
+      # Media / brightness (works even while holding other keys)
+      bindel = [
+        ", XF86AudioRaiseVolume,   exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
+        ", XF86AudioLowerVolume,   exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+        ", XF86MonBrightnessUp,    exec, brightnessctl s 10%+"
+        ", XF86MonBrightnessDown,  exec, brightnessctl s 10%-"
+      ];
+
+      bindl = [
+        ", XF86AudioMute,  exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+        ", XF86AudioPlay,  exec, playerctl play-pause"
+        ", XF86AudioNext,  exec, playerctl next"
+        ", XF86AudioPrev,  exec, playerctl previous"
       ];
     };
+  };
+
+  # ── rzi-shell: deploy QML package → ~/.config/quickshell/rzi/ ────────────
+  # Build: nix build .#rzi-shell
+  # Launch: quickshell -p rzi  (configured in exec-once above)
+
+  xdg.configFile."quickshell/rzi" = {
+    source   = pkgs.callPackage ../../pkgs/rzi-shell {};
+    recursive = true;   # symlink files individually so HM can merge the dir
   };
 }
