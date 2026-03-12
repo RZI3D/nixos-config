@@ -209,6 +209,7 @@
 
       gesture = [
         "4, horizontal, workspace"
+        "3, swipe, move"
       ];
     };
   };
