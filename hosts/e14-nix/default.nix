@@ -105,7 +105,8 @@ fonts.packages = with pkgs; [
     brightnessctl   # Backlight control
     wl-clipboard    # Copy/Paste
     libwebp         # For image processing
-
+     
+    fish
     # Audio/Media
     wireplumber
     playerctl

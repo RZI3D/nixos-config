@@ -1,3 +1,4 @@
+import Quickshell
 import QtQuick
 import "../theme" as Theme
 
@@ -13,7 +14,7 @@ Item {
 
         Text {
             id:             dateLabel
-            text:           Qt.formatDate(clock.date, "ddd dd MMM")
+            text:           Qt.formatDate(new Date(), "ddd dd MMM")
             color:          Theme.Catppuccin.fgMuted
             font.family:    Theme.Catppuccin.font
             font.pixelSize: Theme.Catppuccin.fontSm
@@ -22,7 +23,7 @@ Item {
 
         Text {
             id:             timeLabel
-            text:           Qt.formatTime(clock.time, "HH:mm")
+            text:           clock.hours.toString().padStart(2, '0') + ":" + clock.minutes.toString().padStart(2, '0')
             color:          Theme.Catppuccin.fg
             font.family:    Theme.Catppuccin.font
             font.pixelSize: Theme.Catppuccin.fontMd

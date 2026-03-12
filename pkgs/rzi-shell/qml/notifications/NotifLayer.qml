@@ -10,8 +10,8 @@ Scope {
     PanelWindow {
         anchors { top: true; right: true }
         margins { top: 8; right: 8 }
-        width:  360
-        height: stack.implicitHeight + 8
+        implicitWidth:  360
+        implicitHeight: stack.implicitHeight + 8
         color:  "transparent"
 
         WlrLayershell.namespace: "quickshell:notifications"

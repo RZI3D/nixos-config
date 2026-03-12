@@ -13,16 +13,16 @@ Scope {
 
             screen:        modelData
             anchors { top: true; left: true; right: true }
-            exclusionMode: ExclusionMode.Exclusive
-            height:        Theme.Catppuccin.barHeight
+            implicitHeight: Theme.Catppuccin.barHeight
             color:         "transparent"
-
+            margins { top: 6; left: 6; right: 6 }
+            
             WlrLayershell.namespace: "quickshell:bar"
 
             Rectangle {
                 anchors.fill: parent
                 color:        Theme.Catppuccin.bgFloat
-
+                radius:       Theme.Catppuccin.radius
                 RowLayout {
                     anchors { fill: parent; margins: Theme.Catppuccin.spacing }
                     spacing: Theme.Catppuccin.spacing

@@ -12,7 +12,7 @@
 
     # Wallpaper
     swww
-
+    papirus-icon-theme
     # Media / HW controls (used by quickshell widgets)
     playerctl
     brightnessctl
@@ -27,6 +27,7 @@
   ];
 
   # ── Kitty terminal (Catppuccin via HM module) ────────────────────────────────
+  catppuccin.kitty.enable = true;
   programs.kitty = {
     enable = true;
     settings = {
@@ -37,6 +38,9 @@
       confirm_os_window_close = 0;
     };
   };
+  
+  # -- Helix --
+  catppuccin.helix.enable = true;
 
   # ── GTK & QT theming ──────────────────────────────────────────────────────────────
   #catppuccin.gtk = {
@@ -48,6 +52,13 @@
   #  platformTheme.name = "gtk";
   #  style.name = "kvantum";
   #};
+ 
+  gtk.iconTheme = {
+    name    = "Papirus-Dark";
+    package = pkgs.papirus-icon-theme;
+  };
+
+  catppuccin.firefox.enable = true;
 
   # ── Cursor ───────────────────────────────────────────────────────────────────
   home.pointerCursor = {
@@ -67,7 +78,7 @@
       exec-once = [
         "swww-daemon"
         "swww img ~/Pictures/Wallpapers/nix-hex.jpg --transition-type grow --transition-pos center"
-        "quickshell"
+        "quickshell -c rzi"
       ];
 
       general = {
@@ -129,21 +140,20 @@
 
       # Allow quickshell layers to blur properly
       layerrule = [
-        "blur, quickshell"
-        "ignorezero, quickshell"
-        "blur, quickshell:*"
-        "ignorezero, quickshell:*"
+        "match:namespace quickshell, blur on"
+        "match:namespace quickshell, ignore_alpha 0.5"
       ];
 
       windowrule = [
-        "float, class:pavucontrol"
-        "float, class:nm-connection-editor"
-        "float, title:^(Picture-in-Picture)$"
+        "match:class pavucontrol, float on"
+        "match:class pavucontrol, center on"
+        "match:class nm-connection-editor, float on"
       ];
 
       "$mod" = "SUPER";
 
       bind = [
+        "$mod, Space, exec, quickshell ipc -c rzi call launcher toggleLauncher"
         "$mod, Return, exec, kitty"
         "$mod, Q, killactive"
         "$mod, F, fullscreen"
@@ -195,6 +205,10 @@
         ", XF86AudioPlay,  exec, playerctl play-pause"
         ", XF86AudioNext,  exec, playerctl next"
         ", XF86AudioPrev,  exec, playerctl previous"
+      ];
+
+      gesture = [
+        "4, horizontal, workspace"
       ];
     };
   };

@@ -5,11 +5,23 @@ import QtQuick.Layouts
 import "../theme" as Theme
 
 Item {
-    visible:        MprisController.currentPlayer !== null
+    id: root
+    property var currentPlayer: null
+
+    visible:        currentPlayer !== null
     implicitWidth:  visible ? mediaRow.implicitWidth + 16 : 0
     implicitHeight: Theme.Catppuccin.barHeight
 
     Behavior on implicitWidth { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+
+    // Grab first player from the model
+    Repeater {
+        model: Mpris.players
+        delegate: Item {
+            Component.onCompleted: { if (index === 0) root.currentPlayer = modelData }
+            Component.onDestruction: { if (index === 0) root.currentPlayer = null }
+        }
+    }
 
     Rectangle {
         anchors.fill: parent
@@ -23,15 +35,14 @@ Item {
             spacing: 6
 
             Text {
-                text: MprisController.currentPlayer?.playbackState === MprisPlaybackState.Playing
-                    ? "󰏤" : "󰐊"
+                text:           (root.currentPlayer?.isPlaying ?? false) ? "󰏤" : "󰐊"
                 color:          Theme.Catppuccin.accent
                 font.family:    Theme.Catppuccin.font
                 font.pixelSize: 14
-                anchors.verticalCenter: parent.verticalCenter
+                Layout.alignment: Qt.AlignVCenter
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: MprisController.currentPlayer?.togglePlaying()
+                    onClicked: root.currentPlayer?.togglePlaying()
                 }
             }
 
@@ -43,10 +54,10 @@ Item {
                 Text {
                     id: trackText
                     text: {
-                        const p = MprisController.currentPlayer
+                        const p = root.currentPlayer
                         if (!p) return ""
-                        const t = p.trackTitle   || ""
-                        const a = p.trackArtists?.join(", ") || ""
+                        const t = p.trackTitle  || ""
+                        const a = p.trackArtist || ""
                         return a ? `${a} — ${t}` : t
                     }
                     color:          Theme.Catppuccin.fg
@@ -61,7 +72,7 @@ Item {
                         loops:    Animation.Infinite
                         from:     0
                         to:       -(trackText.implicitWidth - 160)
-                        duration: (trackText.implicitWidth - 160) * 30
+                        duration: trackText.implicitWidth > 160 ? (trackText.implicitWidth - 160) * 30 : 1
                     }
                 }
             }
@@ -69,12 +80,12 @@ Item {
             Text {
                 text: "󰒮"
                 color: Theme.Catppuccin.fgMuted; font.family: Theme.Catppuccin.font; font.pixelSize: 13
-                MouseArea { anchors.fill: parent; onClicked: MprisController.currentPlayer?.previous() }
+                MouseArea { anchors.fill: parent; onClicked: root.currentPlayer?.previous() }
             }
             Text {
                 text: "󰒭"
                 color: Theme.Catppuccin.fgMuted; font.family: Theme.Catppuccin.font; font.pixelSize: 13
-                MouseArea { anchors.fill: parent; onClicked: MprisController.currentPlayer?.next() }
+                MouseArea { anchors.fill: parent; onClicked: root.currentPlayer?.next() }
             }
         }
     }

@@ -46,9 +46,12 @@
     };
 
     profiles.zackariyya = {
+      extensions.force = true;
       isDefault = true;
       settings = {
-        # may be useful later
+        "browser.startup.page" = 3;  # 3 = restore previous session
+        "ui.systemUsesDarkTheme" = 1;
+        "browser.in-content.dark-mode" = true;        
       };
     };
   };

@@ -21,7 +21,13 @@
 
     catppuccin = {
       url = "github:catppuccin/nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    claude-desktop = {
+      url = "github:k3d3/claude-desktop-linux-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    }; 
   };
 
   outputs = { self, nixpkgs, home-manager, caelestia-shell, nix4vscode, quickshell, catppuccin, ... }@inputs:
@@ -63,6 +69,7 @@
           catppuccin.homeModules.catppuccin
           ./modules/desktop/rzi-hypr.nix
           ./modules/devtools/common.nix
+          ./modules/productivity
         ];
       };
     };
