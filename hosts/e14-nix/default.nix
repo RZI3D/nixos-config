@@ -111,8 +111,11 @@ fonts.packages = with pkgs; [
     wireplumber
     playerctl
     curl
+    kdePackages.kwallet
+    kdePackages.kwalletmanager
+    kdePackages.kwallet-pam
   ];
-
+  services.dbus.packages = [ pkgs.kdePackages.kwallet ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;

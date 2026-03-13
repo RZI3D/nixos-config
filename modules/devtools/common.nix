@@ -4,17 +4,28 @@
   # 1. System Packages (The stuff you wanted in every flake)
   home.packages = with pkgs; [
     gh
-    helix #goated
+    helix
     htop
     nil # Nix Language Server
     nixfmt # Official Nix Formatter
   ];
-
-
+  
+  # Git Configuration
+  programs.git = {
+    enable = true;
+    settings = {
+      user = {
+        name  = "rzi3d";
+        email = "zackiesattaur@gmail.com";
+      };
+      init.defaultBranch = "main";
+    };
+  };
+  
+  # Helix Text Editor
   programs.helix = {
     enable = true;
     settings = {
-  #    theme = "autumn_night_transparent";
       editor.cursor-shape = {
         normal = "block";
         insert = "bar";
@@ -26,12 +37,6 @@
       auto-format = true;
       formatter.command = lib.getExe pkgs.nixfmt;
     }];
-  #  themes = {
-  #    autumn_night_transparent = {
-  #      "inherits" = "autumn_night";
-  #      "ui.background" = { };
-  #    };
-  #  };
   };
 
   # 2. VSCode Configuration
@@ -94,7 +99,13 @@
         "workbench.colorTheme" = "Catppuccin Mocha";
         "editor.formatOnSave" = true;
         "window.titleBarStyle" = "custom";
+        "password-store" = "kwallet6";
       };
     };
+
+    argvSettings = {
+      "password-store" = "kwallet6";
+    };
+
   };
 }

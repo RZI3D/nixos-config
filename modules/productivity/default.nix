@@ -2,8 +2,9 @@
 
 {
   imports = [
-    ./ai.nix
+    ./common.nix
     ./browsers.nix
+    ./webapps.nix
     ./office.nix
     ./notekeeping.nix
     ./creative.nix

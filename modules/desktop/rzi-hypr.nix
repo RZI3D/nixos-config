@@ -79,6 +79,7 @@
         "swww-daemon"
         "swww img ~/Pictures/Wallpapers/nix-hex.jpg --transition-type grow --transition-pos center"
         "quickshell -c rzi"
+        "kwalletd6"
       ];
 
       general = {
