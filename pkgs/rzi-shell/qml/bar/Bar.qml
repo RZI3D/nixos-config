@@ -26,17 +26,17 @@ Scope {
 
                 // Left and right only in the layout
                 RowLayout {
-                    anchors { fill: parent; margins: Theme.Catppuccin.spacing }
+                    anchors { fill: parent; margins: Theme.Catppuccin.spacing;}
                     spacing: 0
-                    Workspaces { Layout.alignment: Qt.AlignVCenter }
+                    Workspaces { Layout.alignment: Qt.AlignVCenter; anchors.verticalCenter: parent.verticalCenter }
                     Item { Layout.fillWidth: true }
-                    SysTray { Layout.alignment: Qt.AlignVCenter }
+                    SysTray { Layout.alignment: Qt.AlignVCenter; anchors.verticalCenter: parent.verticalCenter }
                 }
-
+                
                 // Clock + media absolutely centered on the bar
                 Row {
                     anchors.centerIn: parent
-                    spacing: Theme.Catppuccin.spacing
+                    spacing: Theme.Catppuccin.spacing + 10
                     Clock       { anchors.verticalCenter: parent.verticalCenter }
                     MediaWidget { anchors.verticalCenter: parent.verticalCenter }
                 }

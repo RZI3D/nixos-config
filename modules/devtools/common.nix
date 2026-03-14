@@ -1,4 +1,4 @@
-{ pkgs, lib,  ... }:
+{ pkgs, lib, ... }:
 
 {
   # 1. System Packages (The stuff you wanted in every flake)
@@ -9,19 +9,19 @@
     nil # Nix Language Server
     nixfmt # Official Nix Formatter
   ];
-  
+
   # Git Configuration
   programs.git = {
     enable = true;
     settings = {
       user = {
-        name  = "rzi3d";
+        name = "rzi3d";
         email = "zackiesattaur@gmail.com";
       };
       init.defaultBranch = "main";
     };
   };
-  
+
   # Helix Text Editor
   programs.helix = {
     enable = true;
@@ -30,13 +30,15 @@
         normal = "block";
         insert = "bar";
         select = "underline";
-      }; 
+      };
     };
-    languages.language = [{
-      name = "nix";
-      auto-format = true;
-      formatter.command = lib.getExe pkgs.nixfmt;
-    }];
+    languages.language = [
+      {
+        name = "nix";
+        auto-format = true;
+        formatter.command = lib.getExe pkgs.nixfmt;
+      }
+    ];
   };
 
   # 2. VSCode Configuration
@@ -53,8 +55,6 @@
 
         # Appearance & UI
         "catppuccin.catppuccin-vsc"
-        "t3dotgg.vsc-material-theme-but-i-wont-sue-you"
-        "phu1237.vs-browser"
 
         # Languages & Tools
         "charliermarsh.ruff"
@@ -91,8 +91,16 @@
         "ms-vscode.vscode-github-issue-notebooks"
         "ms-vsliveshare.vsliveshare"
 
-        # Formatting
-        "esbenp.prettier-vscode"
+        # QT (Yessirrr)
+
+        "TheQtCompany.qt-core"       # required base for all others
+        "TheQtCompany.qt-qml"        # QML language support
+        "TheQtCompany.qt-cpp"        # Qt C++ support
+        "TheQtCompany.qt-ui"         # .ui file designer
+
+        "jnoortheen.nix-ide" # Nix Syntax Highlighting
+
+        "esbenp.prettier-vscode"   # Formatting
       ];
 
       userSettings = {
@@ -104,6 +112,7 @@
     };
 
     argvSettings = {
+      "enable-crash-reporter" = false;
       "password-store" = "kwallet6";
     };
 

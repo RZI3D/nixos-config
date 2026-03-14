@@ -7,34 +7,48 @@ Item {
     implicitWidth:  trayRow.implicitWidth
     implicitHeight: Theme.Catppuccin.barHeight
 
-    Row {
-        id: trayRow
+    Rectangle {
+
+        // For the box around the actual thing
         anchors.centerIn: parent
-        spacing: 4
+        height: Theme.Catppuccin.barHeight -10
 
-        Repeater {
-            model: SystemTray.items
+        // If the width is 0 (no items in tray), then dont show it.
+        width: parent.width === 0 ? 
+               0 : parent.width + 10
+        
+        color: Theme.Catppuccin.surface1
+        radius: 9
 
-            Item {
-                required property SystemTrayItem modelData
-                width: 22; height: 22
+        Row {
+            id: trayRow
+            anchors.centerIn: parent
+            spacing: 4
 
-                Image {
-                    anchors.centerIn: parent
-                    source:   modelData.icon
-                    width:    16; height: 16
-                    smooth:   true
-                    fillMode: Image.PreserveAspectFit
-                }
+            Repeater {
+                model: SystemTray.items
 
-                MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.LeftButton | Qt.RightButton
-                    onClicked: (mouse) => {
-                        if (mouse.button === Qt.LeftButton)
-                            modelData.activate()
-                        else
-                            modelData.sendContextMenuRequest(mapToGlobal(0, 0))
+                Item {
+                    required property SystemTrayItem modelData
+                    width: 22; height: 22
+
+                    Image {
+                        anchors.centerIn: parent
+                        source:   modelData.icon
+                        width:    16; height: 16
+                        smooth:   true
+                        fillMode: Image.PreserveAspectFit
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        onClicked: (mouse) => {
+                            if (mouse.button === Qt.LeftButton)
+                                modelData.activate()
+                            else
+                                modelData.sendContextMenuRequest(mapToGlobal(0, 0))
+                        }
                     }
                 }
             }

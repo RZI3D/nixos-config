@@ -1,4 +1,9 @@
-{ inputs, pkgs, config, ... }:
+{
+  inputs,
+  pkgs,
+  config,
+  ...
+}:
 
 {
   # ── Catppuccin global theme ─────────────────────────────────────────────────
@@ -8,7 +13,7 @@
   # ── Packages ─────────────────────────────────────────────────────────────────
   home.packages = with pkgs; [
     inputs.quickshell.packages.${pkgs.system}.quickshell
-    (callPackage ../../pkgs/rzi-shell {})
+    (callPackage ../../pkgs/rzi-shell { })
 
     # Wallpaper
     swww
@@ -16,14 +21,15 @@
     # Media / HW controls (used by quickshell widgets)
     playerctl
     brightnessctl
-    wireplumber      # wpctl for volume
+    wireplumber # wpctl for volume
 
     # Screenshot
     grimblast
     wl-clipboard
 
     # Utility
-    libnotify        # notify-send (for testing notifications)
+    libnotify # notify-send (for testing notifications)
+    adwaita-icon-theme
   ];
 
   # ── Kitty terminal (Catppuccin via HM module) ────────────────────────────────
@@ -31,14 +37,14 @@
   programs.kitty = {
     enable = true;
     settings = {
-      font_family          = "JetBrainsMono Nerd Font";
-      font_size            = "12.0";
+      font_family = "JetBrainsMono Nerd Font";
+      font_size = "12.0";
       window_padding_width = 12;
-      background_opacity   = "0.92";
+      background_opacity = "0.92";
       confirm_os_window_close = 0;
     };
   };
-  
+
   # -- Helix --
   catppuccin.helix.enable = true;
 
@@ -52,19 +58,26 @@
   #  platformTheme.name = "gtk";
   #  style.name = "kvantum";
   #};
- 
+
   gtk.iconTheme = {
-    name    = "Papirus-Dark";
+    name = "Papirus-Dark";
     package = pkgs.papirus-icon-theme;
+  };
+
+  gtk.gtk3.extraConfig = {
+    gtk-fallback-icon-theme = "Adwaita";
+  };
+  gtk.gtk4.extraConfig = {
+    gtk-fallback-icon-theme = "Adwaita";
   };
 
   catppuccin.firefox.enable = true;
 
   # ── Cursor ───────────────────────────────────────────────────────────────────
   home.pointerCursor = {
-    name    = "catppuccin-mocha-mauve-cursors";
+    name = "catppuccin-mocha-mauve-cursors";
     package = pkgs.catppuccin-cursors.mochaMauve;
-    size    = 24;
+    size = 24;
     gtk.enable = true;
   };
 
@@ -77,16 +90,15 @@
 
       exec-once = [
         "swww-daemon"
-        "swww img ~/Pictures/Wallpapers/nix-hex.jpg --transition-type grow --transition-pos center"
         "quickshell -c rzi"
         "kwalletd6"
       ];
 
       general = {
-        gaps_in  = 5;
+        gaps_in = 5;
         gaps_out = 12;
         border_size = 2;
-        "col.active_border"   = "rgb(cba6f7) rgb(89b4fa) 45deg"; # mauve → blue
+        "col.active_border" = "rgb(cba6f7) rgb(89b4fa) 45deg"; # mauve → blue
         "col.inactive_border" = "rgb(313244)";
         layout = "dwindle";
       };
@@ -95,14 +107,14 @@
         rounding = 12;
         blur = {
           enabled = true;
-          size    = 8;
-          passes  = 2;
-          popups  = true;
+          size = 8;
+          passes = 2;
+          popups = true;
         };
         shadow = {
           enabled = true;
-          range   = 20;
-          color   = "rgba(1e1e2eCC)";
+          range = 20;
+          color = "rgba(1e1e2eCC)";
         };
       };
 
@@ -110,10 +122,9 @@
         enabled = true;
         bezier = [
           "easeOut, 0.16, 1, 0.3, 1"
-          "spring, 0.68, -0.55, 0.27, 1.55"
         ];
         animation = [
-          "windows,    1, 5, spring, popin 80%"
+          "windows,    1, 5, easeOut, popin 80%"
           "windowsOut, 1, 4, easeOut, popin 80%"
           "fade,       1, 4, easeOut"
           "workspaces, 1, 5, easeOut, slide"
@@ -125,25 +136,25 @@
         kb_layout = "us";
         follow_mouse = 1;
         touchpad.natural_scroll = true;
-        touchpad.tap-to-click   = true;
+        touchpad.tap-to-click = true;
       };
 
       dwindle = {
-        pseudotile     = true;
+        pseudotile = true;
         preserve_split = true;
       };
 
       misc = {
-        disable_hyprland_logo   = true;
+        disable_hyprland_logo = true;
         disable_splash_rendering = true;
-        animate_manual_resizes  = true;
+        animate_manual_resizes = true;
       };
 
       # Allow quickshell layers to blur properly
-      layerrule = [
-        "match:namespace quickshell, blur on"
-        "match:namespace quickshell, ignore_alpha 0.5"
-      ];
+      #      layerrule = [
+      #        "match:namespace quickshell, blur on"
+      #        "match:namespace quickshell, ignore_alpha 0.5"
+      #      ];
 
       windowrule = [
         "match:class pavucontrol, float on"
@@ -159,8 +170,8 @@
         "$mod, Q, killactive"
         "$mod, F, fullscreen"
         "$mod, V, togglefloating"
-        "$mod, P, exec, hyprpicker -a"         # color picker
-        "$mod, S, exec, grimblast copy area"   # screenshot
+        "$mod, P, exec, hyprpicker -a" # color picker
+        "$mod, S, exec, grimblast copy area" # screenshot
         "$mod SHIFT, S, exec, grimblast save area ~/Pictures/Screenshots/$(date +%F_%T).png"
 
         # Focus
@@ -178,14 +189,19 @@
         "$mod SHIFT, right, movewindow, r"
         "$mod SHIFT, up,    movewindow, u"
         "$mod SHIFT, down,  movewindow, d"
-      ] ++ (
-        builtins.concatLists (builtins.genList (i:
-          let ws = toString (i + 1); in [
+      ]
+      ++ (builtins.concatLists (
+        builtins.genList (
+          i:
+          let
+            ws = toString (i + 1);
+          in
+          [
             "$mod, ${ws}, workspace, ${ws}"
             "$mod SHIFT, ${ws}, movetoworkspace, ${ws}"
           ]
-        ) 9)
-      );
+        ) 9
+      ));
 
       # Mouse binds
       bindm = [
@@ -220,7 +236,7 @@
   # Launch: quickshell -p rzi  (configured in exec-once above)
 
   xdg.configFile."quickshell/rzi" = {
-    source   = pkgs.callPackage ../../pkgs/rzi-shell {};
-    recursive = true;   # symlink files individually so HM can merge the dir
+    source = pkgs.callPackage ../../pkgs/rzi-shell { };
+    recursive = true; # symlink files individually so HM can merge the dir
   };
 }

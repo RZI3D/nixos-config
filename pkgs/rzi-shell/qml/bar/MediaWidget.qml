@@ -24,10 +24,13 @@ Item {
     }
 
     Rectangle {
-        anchors.fill: parent
-        radius:       Theme.Catppuccin.radiusSm
-        color:        Theme.Catppuccin.surface0
-        visible:      parent.visible
+        
+        // For the box around the actual thing
+        anchors.centerIn: parent
+        height: Theme.Catppuccin.barHeight -10
+        width: parent.width + 10
+        color: Theme.Catppuccin.surface1
+        radius: 9
 
         RowLayout {
             id: mediaRow
