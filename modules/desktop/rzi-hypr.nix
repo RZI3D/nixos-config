@@ -5,6 +5,15 @@
   ...
 }:
 
+let
+  colloid-catppuccin = pkgs.callPackage ../../pkgs/colloid-catppuccin { };
+  themeName = "Colloid-Dark-Catppuccin";
+  qt6ct-kde = pkgs.kdePackages.qt6ct.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ [ ./../../pkgs/qt6ct-kde.patch ];
+    name = "qt6ct-kde";
+  });
+in
+
 {
   # ── Catppuccin global theme ─────────────────────────────────────────────────
   catppuccin.flavor = "mocha";
@@ -30,6 +39,9 @@
     # Utility
     libnotify # notify-send (for testing notifications)
     adwaita-icon-theme
+    qt6Packages.qt6ct
+    kdePackages.qtstyleplugin-kvantum
+    kdePackages.kservice
   ];
 
   # ── Kitty terminal (Catppuccin via HM module) ────────────────────────────────
@@ -59,6 +71,163 @@
   #  style.name = "kvantum";
   #};
 
+  catppuccin.kvantum = {
+    enable = true;
+    flavor = "mocha";
+    accent = "mauve";
+  };
+
+  # catppuccin.qt5ct = {
+  #   enable = true;
+  #   flavor = "mocha";
+  #   accent = "mauve";
+  # };
+  xdg.configFile."qt6ct/qt6ct.conf".text = ''
+    [Appearance]
+    color_scheme_path=/dev/null
+    custom_palette=true
+    icon_theme=Papirus-Dark
+    standard_dialogs=default
+    style=kvantum
+
+    [ColorScheme]
+    active_colors=#cdd6f4, #313244, #585b70, #45475a, #6c7086, #11111b, #cdd6f4, #cdd6f4, #cdd6f4, #1e1e2e, #181825, #11111b, #cba6f7, #1e1e2e, #cba6f7, #f38ba8, #a6e3a1, #f9e2af, #cdd6f4, #313244, #585b70
+    disabled_colors=#6c7086, #313244, #45475a, #45475a, #6c7086, #11111b, #6c7086, #6c7086, #6c7086, #1e1e2e, #181825, #11111b, #cba6f7, #1e1e2e, #cba6f7, #f38ba8, #a6e3a1, #f9e2af, #6c7086, #313244, #45475a
+    inactive_colors=#cdd6f4, #313244, #585b70, #45475a, #6c7086, #11111b, #cdd6f4, #cdd6f4, #cdd6f4, #1e1e2e, #181825, #11111b, #cba6f7, #1e1e2e, #cba6f7, #f38ba8, #a6e3a1, #f9e2af, #cdd6f4, #313244, #585b70
+
+    #[Fonts]
+    #fixed=@Variant(\0\0\0@\0\0\0\x12\0J\0\x65\0\x74\0\x42\0r\0\x61\0i\0n\0s\0M\0o\0n\0o@(\0\0\0\0\0\0\xff\xff\xff\xff\x5\x1\0\x32\x10)
+    #general=@Variant(\0\0\0@\0\0\0\x12\0J\0\x65\0\x74\0\x42\0r\0\x61\0i\0n\0s\0M\0o\0n\0o@(\0\0\0\0\0\0\xff\xff\xff\xff\x5\x1\0\x32\x10)
+
+    [Interface]
+    activate_item_on_single_click=1
+    buttonbox_layout=0
+    cursor_flash_time=1000
+    dialog_buttons_have_icons=1
+    double_click_interval=400
+    gui_effects=@Invalid()
+    keyboard_scheme=2
+    menus_have_icons=true
+    show_shortcuts_in_context_menus=true
+    stylesheets=@Invalid()
+    toolbutton_style=4
+    underline_shortcut=1
+    wheel_scroll_lines=3
+
+    [Troubleshooting]
+    force_raster_widgets=1
+    ignored_applications=@Invalid()
+  '';
+  qt = {
+    enable = true;
+    platformTheme.name = "qtct";
+    style.name = "kvantum";
+  };
+
+  xdg.configFile."kdeglobals".text = ''
+    # [Colors:Window]
+    # BackgroundNormal=30,30,46
+    # BackgroundAlternate=24,24,37
+    # ForegroundNormal=205,214,244
+    # ForegroundInactive=166,173,200
+    # DecorationFocus=203,166,247
+    # DecorationHover=203,166,247
+
+    # [Colors:View]
+    # BackgroundNormal=24,24,37
+    # BackgroundAlternate=30,30,46
+    # ForegroundNormal=205,214,244
+    # ForegroundInactive=166,173,200
+    # DecorationFocus=203,166,247
+    # DecorationHover=203,166,247
+
+    # [Colors:Button]
+    # BackgroundNormal=49,50,68
+    # BackgroundAlternate=69,71,90
+    # ForegroundNormal=205,214,244
+    # ForegroundInactive=166,173,200
+    # DecorationFocus=203,166,247
+    # DecorationHover=203,166,247
+
+    # [Colors:Selection]
+    # BackgroundNormal=203,166,247
+    # ForegroundNormal=30,30,46
+
+    # [Colors:Tooltip]
+    # BackgroundNormal=24,24,37
+    # ForegroundNormal=205,214,244
+
+    [General]
+    ColorScheme=CatppuccinMochaMauve
+
+    [Icons]
+    Theme=Papirus-Dark
+  '';
+  xdg.dataFile."color-schemes/CatppuccinMochaMauve.colors".text = ''
+    [ColorScheme]
+    Name=Catppuccin Mocha Mauve
+
+    [Colors:Window]
+    BackgroundNormal=30,30,46
+    BackgroundAlternate=24,24,37
+    ForegroundNormal=205,214,244
+    ForegroundInactive=166,173,200
+    DecorationFocus=203,166,247
+    DecorationHover=203,166,247
+
+    [Colors:View]
+    BackgroundNormal=24,24,37
+    BackgroundAlternate=30,30,46
+    ForegroundNormal=205,214,244
+    ForegroundInactive=166,173,200
+    DecorationFocus=203,166,247
+    DecorationHover=203,166,247
+
+    [Colors:Button]
+    BackgroundNormal=49,50,68
+    BackgroundAlternate=69,71,90
+    ForegroundNormal=205,214,244
+    ForegroundInactive=166,173,200
+    DecorationFocus=203,166,247
+    DecorationHover=203,166,247
+
+    [Colors:Selection]
+    BackgroundNormal=203,166,247
+    ForegroundNormal=30,30,46
+
+    [Colors:Tooltip]
+    BackgroundNormal=24,24,37
+    ForegroundNormal=205,214,244
+
+    [Colors:Complementary]
+    BackgroundNormal=24,24,37
+    ForegroundNormal=205,214,244
+
+    [KDE]
+    contrast=4
+  '';
+
+  # GTK
+  gtk = {
+    enable = true;
+    theme = {
+      name = themeName;
+      package = colloid-catppuccin;
+    };
+  };
+
+  xdg.configFile = {
+    "gtk-4.0/gtk.css".source = "${colloid-catppuccin}/share/themes/${themeName}/gtk-4.0/gtk.css";
+    "gtk-4.0/gtk-dark.css".source =
+      "${colloid-catppuccin}/share/themes/${themeName}/gtk-4.0/gtk-dark.css";
+    "gtk-4.0/assets" = {
+      recursive = true;
+      source = "${colloid-catppuccin}/share/themes/${themeName}/gtk-4.0/assets";
+    };
+  };
+
+  dconf.enable = true;
+
   gtk.iconTheme = {
     name = "Papirus-Dark";
     package = pkgs.papirus-icon-theme;
@@ -84,8 +253,11 @@
   # ── Hyprland ─────────────────────────────────────────────────────────────────
   wayland.windowManager.hyprland = {
     enable = true;
-
     settings = {
+      env = [
+        "QT_QPA_PLATFORMTHEME,qt6ct"
+        "QT_STYLE_OVERRIDE,kvantum"
+      ];
       monitor = ",preferred,auto,1";
 
       exec-once = [

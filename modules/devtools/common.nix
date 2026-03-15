@@ -8,6 +8,7 @@
     htop
     nil # Nix Language Server
     nixfmt # Official Nix Formatter
+    qt6.qtdeclarative
   ];
 
   # Git Configuration
@@ -93,14 +94,14 @@
 
         # QT (Yessirrr)
 
-        "TheQtCompany.qt-core"       # required base for all others
-        "TheQtCompany.qt-qml"        # QML language support
-        "TheQtCompany.qt-cpp"        # Qt C++ support
-        "TheQtCompany.qt-ui"         # .ui file designer
+        "TheQtCompany.qt-core" # required base for all others
+        "TheQtCompany.qt-qml" # QML language support
+        "TheQtCompany.qt-cpp" # Qt C++ support
+        "TheQtCompany.qt-ui" # .ui file designer
 
         "jnoortheen.nix-ide" # Nix Syntax Highlighting
 
-        "esbenp.prettier-vscode"   # Formatting
+        "esbenp.prettier-vscode" # Formatting
       ];
 
       userSettings = {

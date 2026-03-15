@@ -22,33 +22,51 @@
     catppuccin = {
       url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
-    }; 
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, caelestia-shell, nix4vscode, quickshell, catppuccin, ... }@inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      caelestia-shell,
+      nix4vscode,
+      quickshell,
+      catppuccin,
+      ...
+    }@inputs:
     let
-      mkSystem = { homeModules }: nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./hosts/e14-nix/default.nix
-          {
-            nixpkgs.overlays = [ nix4vscode.overlays.default ];
-            nixpkgs.config.allowUnfree = true;
-          }
-          home-manager.nixosModules.home-manager {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit inputs; };
-            home-manager.users.zackariyyasattaur = {
-              home.username = "zackariyyasattaur";
-              home.homeDirectory = "/home/zackariyyasattaur";
-              home.stateVersion = "24.11";
-              imports = homeModules;
-            };
-          }
-        ];
-      };
+      mkSystem =
+        { homeModules }:
+        nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./hosts/e14-nix/default.nix
+            {
+              nixpkgs.overlays = [
+                nix4vscode.overlays.default
+                (final: prev: {
+                  qt6ct = prev.callPackage ./pkgs/qt6ct-kde { pkgs = prev; };
+                })
+              ];
+              nixpkgs.config.allowUnfree = true;
+            }
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.users.zackariyyasattaur = {
+                home.username = "zackariyyasattaur";
+                home.homeDirectory = "/home/zackariyyasattaur";
+                home.stateVersion = "24.11";
+                imports = homeModules;
+              };
+            }
+          ];
+        };
     in
     {
       nixosConfigurations.caelestia = mkSystem {
