@@ -8,7 +8,6 @@ import "../theme" as Theme
 
 Scope {
     property bool open: false
-
     property var sortedApps: []
 
     Instantiator {
@@ -164,6 +163,8 @@ Scope {
                             spacing: 10
 
                             IconImage {
+                                property bool usedFallback: false
+                                
                                 source:  appItem.modelData.icon !== "" ? "image://icon/" + appItem.modelData.icon : ""
                                 visible: appItem.modelData.icon !== "" && status === Image.Ready
                                 width:   32; height: 32

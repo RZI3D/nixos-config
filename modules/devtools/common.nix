@@ -56,6 +56,7 @@
 
         # Appearance & UI
         "catppuccin.catppuccin-vsc"
+        "oderwat.indent-rainbow"
 
         # Languages & Tools
         "charliermarsh.ruff"

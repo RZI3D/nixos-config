@@ -30,8 +30,20 @@
       id = 12;
       theme = "dark";
       icon = builtins.fetchurl {
-        url = "https://upload.wikimedia.org/wikipedia/commons/1/1d/Google_Gemini_icon_2025.svg";
-        sha256 = "02cxml85qramfip0i7ram45r2krmrxwfs17swdyj5ynm65kdz8nd";
+        name = "gemini.png";
+        url = "https://uxwing.com/wp-admin/admin-ajax.php?action=resize_image&size=32x32&file=google-gemini-icon.png&category_slug=brands-and-social-media";
+        sha256 = "1ky8s6rn28f56132c3nr9x4vh1x4kmhwscch8m0ykrlhwvavg2ks";
+      };
+    };
+
+    figma = {
+      name = "Figma";
+      url = "https://www.figma.com";
+      id = 13;
+      theme = "dark";
+      icon = builtins.fetchurl {
+        url = "https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg";
+        sha256 = "11x72ik5mndqmnnmw8jph9bnalkr9z634ggnk82s2f72w8gb24wm";
       };
 
     };

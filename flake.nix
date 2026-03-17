@@ -47,9 +47,6 @@
             {
               nixpkgs.overlays = [
                 nix4vscode.overlays.default
-                (final: prev: {
-                  qt6ct = prev.callPackage ./pkgs/qt6ct-kde { pkgs = prev; };
-                })
               ];
               nixpkgs.config.allowUnfree = true;
             }
