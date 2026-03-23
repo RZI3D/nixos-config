@@ -28,9 +28,9 @@ Scope {
                 RowLayout {
                     anchors { fill: parent; margins: Theme.Catppuccin.spacing;}
                     spacing: 0
-                    Workspaces { Layout.alignment: Qt.AlignVCenter; anchors.verticalCenter: parent.verticalCenter }
+                    Workspaces { Layout.alignment: Qt.AlignVCenter; Layout.fillHeight: true }
                     Item { Layout.fillWidth: true }
-                    SysTray { Layout.alignment: Qt.AlignVCenter; anchors.verticalCenter: parent.verticalCenter }
+                    SysTray { Layout.alignment: Qt.AlignVCenter; Layout.fillHeight: true }
                 }
                 
                 // Clock + media absolutely centered on the bar

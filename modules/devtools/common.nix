@@ -14,12 +14,14 @@
   # Git Configuration
   programs.git = {
     enable = true;
+    signing.format = null;
     settings = {
       user = {
         name = "rzi3d";
         email = "zackiesattaur@gmail.com";
       };
       init.defaultBranch = "main";
+
     };
   };
 
@@ -96,7 +98,7 @@
         # QT (Yessirrr)
 
         "TheQtCompany.qt-core" # required base for all others
-        "TheQtCompany.qt-qml" # QML language support
+        # "TheQtCompany.qt-qml" # QML language support, Quickshell issues
         "TheQtCompany.qt-cpp" # Qt C++ support
         "TheQtCompany.qt-ui" # .ui file designer
 
@@ -106,17 +108,34 @@
       ];
 
       userSettings = {
-        "workbench.colorTheme" = "Catppuccin Mocha";
+        "catppuccin.accentColor" = "mauve";
         "editor.formatOnSave" = true;
-        "window.titleBarStyle" = "custom";
+        "editor.semanticHighlighting.enabled" = true;
         "password-store" = "kwallet6";
+        "qt-qml.qmlls.additionalImportPaths" = [
+          "${pkgs.quickshell}/lib/qml"
+        ];
+        "qt-qml.qmlls.customExePath" = "qmlls";
+        "terminal.integrated.minimumContrastRatio" = 1;
+        "window.titleBarStyle" = "custom";
+        "workbench.colorTheme" = "Catppuccin Mocha";
+        "workbench.iconTheme" = "catppuccin-mocha";
+        "workbench.editorAssociations" = {
+          "{git,gitlens,chat-editing-snapshot-text-model,copilot,git-graph,git-graph-3}:/**/*.qrc" =
+            "default";
+          "{git,gitlens,chat-editing-snapshot-text-model,copilot,git-graph,git-graph-3}:/**/*.ui" = "default";
+          "*.qrc" = "qt-core.qrcEditor";
+        };
+        "qt-qml.doNotAskForQmllsDownload" = true;
+        "kilo-code.debug" = false;
       };
     };
 
-    argvSettings = {
-      "enable-crash-reporter" = false;
-      "password-store" = "kwallet6";
-    };
+    # Manually put it in the file because it would complain
+    # argvSettings = {
+    #   "enable-crash-reporter" = false;
+    #   "password-store" = "kwallet6";
+    # };
 
   };
 }

@@ -2,13 +2,18 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -16,7 +21,10 @@
   boot.loader.systemd-boot.configurationLimit = 5;
   # boot.loader.systemd-boot.uki.enable = true;
   networking.hostName = "z-e14-nix"; # Define your hostname.
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # Configure network connections interactively with nmcli or nmtui.
   networking.networkmanager.enable = true;
@@ -39,9 +47,6 @@
   # Enable the X11 windowing system.
   # services.xserver.enable = true;
 
-
-  
-
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
   # services.xserver.xkb.options = "eurosign:e,caps:escape";
@@ -63,7 +68,10 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.zackariyyasattaur = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+    ]; # Enable ‘sudo’ for the user.
     hashedPassword = "$6$rkp83G7XDj8weVI9$hEwyG/13SqUrYvIQc3ZT7/vpvEAGDRvHew47DM2w0Lw44xxVC8YXqHUlNUxEX0VxIdRq6fivmWILvrsODXVoA/";
   };
 
@@ -75,13 +83,13 @@
   services.displayManager.sddm.wayland.enable = true;
   programs.hyprland.enable = true;
 
-  services.upower.enable = true;   # Battery info
+  services.upower.enable = true; # Battery info
   services.geoclue2.enable = true; # Night light/location
-  services.gvfs.enable = true;     # File manager mounting
+  services.gvfs.enable = true; # File manager mounting
   services.dbus.enable = true;
   security.pam.services.login.kwallet.enable = true;
 
-fonts.packages = with pkgs; [
+  fonts.packages = with pkgs; [
     rubik
     nerd-fonts.ubuntu
     nerd-fonts.jetbrains-mono
@@ -97,15 +105,14 @@ fonts.packages = with pkgs; [
   # You can use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
     git
-    python3         # Used for various scripts
+    python3 # Used for various scripts
     kdePackages.plasma-workspace-wallpapers
     # Desktop Components
-    swww            # Wallpaper daemon
-    pywal           # Often used as a fallback for colors
-    brightnessctl   # Backlight control
-    wl-clipboard    # Copy/Paste
-    libwebp         # For image processing
-     
+    swww # Wallpaper daemon
+    pywal # Often used as a fallback for colors
+    brightnessctl # Backlight control
+    wl-clipboard # Copy/Paste
+    libwebp # For image processing
     fish
     # Audio/Media
     wireplumber
@@ -115,6 +122,7 @@ fonts.packages = with pkgs; [
     kdePackages.kwalletmanager
     kdePackages.kwallet-pam
   ];
+
   services.dbus.packages = [ pkgs.kdePackages.kwallet ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -131,7 +139,7 @@ fonts.packages = with pkgs; [
     enable = true;
     settings = {
       PasswordAuthentication = true; # Set to false later once you add your SSH keys
-      PermitRootLogin = "no";        # Arch security best practice
+      PermitRootLogin = "no"; # Arch security best practice
     };
   };
 
@@ -166,4 +174,3 @@ fonts.packages = with pkgs; [
   system.stateVersion = "26.05"; # Did you read the comment?
 
 }
-

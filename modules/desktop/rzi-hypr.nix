@@ -17,12 +17,15 @@ in
   catppuccin.enable = true;
   # ── Packages ─────────────────────────────────────────────────────────────────
   home.packages = with pkgs; [
-    inputs.quickshell.packages.${pkgs.system}.quickshell
+    quickshell
     (callPackage ../../pkgs/rzi-shell { })
 
     # Wallpaper
     swww
-    # papirus-icon-theme # handled by catppuccin
+    # papirus-icon-theme # Handled by catppuccin, it patches it with your accent
+    fish
+    starship
+    eza
     # Media / HW controls (used by quickshell widgets)
     playerctl
     brightnessctl
@@ -34,23 +37,100 @@ in
 
     # Utility
     libnotify # notify-send (for testing notifications)
-    adwaita-icon-theme
     kdePackages.breeze-icons
     kdePackages.qtstyleplugin-kvantum
     kdePackages.kservice
     kdePackages.qtsvg
   ];
 
-  # ── Kitty terminal (Catppuccin via HM module) ────────────────────────────────
+  # ── Kitty & terminal (Catppuccin via HM module) ────────────────────────────────
   catppuccin.kitty.enable = true;
   programs.kitty = {
     enable = true;
     settings = {
       font_family = "JetBrainsMono Nerd Font";
-      font_size = "12.0";
+      font_size = "11.0";
+      cursor_trail = 1; # ms delay before trail triggers (0 = always, higher = only on big jumps)
+      shell = "fish";
+      cursor_shape = "beam";
       window_padding_width = 12;
       background_opacity = "0.92";
       confirm_os_window_close = 0;
+    };
+  };
+
+  programs.fish = {
+    enable = true;
+    interactiveShellInit = ''
+      set -g fish_greeting "" 
+
+      # These sequences are vital for the end-4 theme colors 
+      if test -f ~/.local/state/quickshell/user/generated/terminal/sequences.txt
+          cat ~/.local/state/quickshell/user/generated/terminal/sequences.txt 
+      end
+    '';
+
+    shellAliases = {
+      clear = "printf '\\033[2J\\033[3J\\033[1;1H'";
+      ls = "eza --icons";
+      pamcan = "pacman";
+      q = "qs -c ii";
+    };
+  };
+
+  programs.starship = {
+    enable = true;
+    enableFishIntegration = true;
+    settings = {
+      add_newline = false;
+
+      # The prompt layout from the repo
+      format = ''
+        $time$cmd_duration 󰜥 $directory $git_branch
+        $character'';
+
+      character = {
+        success_symbol = "[   ](bold fg:blue)";
+        error_symbol = "[   ](bold fg:red)";
+      };
+
+      directory = {
+        home_symbol = "  ";
+        read_only = "  ";
+        style = "bg:green fg:black";
+        truncation_length = 6;
+        format = "[](bold fg:green)[󰉋 $path]($style)[](bold fg:green)"; # The Pill
+        substitutions = {
+          "Desktop" = "  ";
+          "Documents" = "  ";
+          "Downloads" = "  ";
+          "Music" = " 󰎈 ";
+          "Pictures" = "  ";
+          "Videos" = "  ";
+          "GitHub" = " 󰊤 ";
+        };
+      };
+
+      git_branch = {
+        style = "bg: cyan";
+        symbol = "󰘬";
+        format = "󰜥 [](bold fg:cyan)[$symbol $branch(:$remote_branch)](fg:black bg:cyan)[ ](bold fg:cyan)";
+      };
+
+      cmd_duration = {
+        min_time = 0;
+        format = "[](bold fg:yellow)[󰪢 $duration](bold bg:yellow fg:black)[](bold fg:yellow)";
+      };
+
+      time = {
+        disabled = false; # Changed from true
+        format = "[](bold fg:purple)[$time](bg:purple fg:black)[](bold fg:purple) ";
+        time_format = "%l:%M %p";
+      };
+
+      # Disable modules not used in this specific look
+      package.disabled = true;
+      memory_usage.disabled = true;
     };
   };
 
@@ -105,10 +185,11 @@ in
   gtk.gtk3.extraConfig = {
     gtk-fallback-icon-theme = "Adwaita";
   };
+
   gtk.gtk4.extraConfig = {
     gtk-fallback-icon-theme = "Adwaita";
   };
-
+  gtk.gtk4.theme = config.gtk.theme;
   catppuccin.firefox.enable = true;
 
   # ── Cursor ───────────────────────────────────────────────────────────────────
@@ -123,6 +204,10 @@ in
   wayland.windowManager.hyprland = {
     enable = true;
     settings = {
+      env = [
+        "QT_QPA_PLATFORMTHEME,kde2"
+        "QT_STYLE_OVERRIDE,kvantum"
+      ];
       monitor = ",preferred,auto,1";
 
       exec-once = [

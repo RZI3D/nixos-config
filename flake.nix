@@ -38,16 +38,17 @@
     }@inputs:
     let
       mkSystem =
-        { homeModules }:
+        {
+          homeModules,
+          systemModules ? [ ],
+        }: # add systemModules with default empty list
         nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
           modules = [
             ./hosts/e14-nix/default.nix
             {
-              nixpkgs.overlays = [
-                nix4vscode.overlays.default
-              ];
+              nixpkgs.overlays = [ nix4vscode.overlays.default ];
               nixpkgs.config.allowUnfree = true;
             }
             home-manager.nixosModules.home-manager
@@ -62,7 +63,8 @@
                 imports = homeModules;
               };
             }
-          ];
+          ]
+          ++ systemModules; # append system modules here
         };
     in
     {
@@ -75,11 +77,16 @@
         ];
       };
       nixosConfigurations.rzi-hypr = mkSystem {
+        systemModules = [
+          ./modules/productivity/ai.nix # Requires system level stuff to configure ollama
+          ./modules/entertainment/games-nix.nix # Requires system level stuff to configure steam and hardware
+        ];
         homeModules = [
           catppuccin.homeModules.catppuccin
           ./modules/desktop/rzi-hypr.nix
           ./modules/devtools/common.nix
           ./modules/productivity
+          ./modules/entertainment/games.nix
         ];
       };
     };
