@@ -98,7 +98,7 @@
         # QT (Yessirrr)
 
         "TheQtCompany.qt-core" # required base for all others
-        # "TheQtCompany.qt-qml" # QML language support, Quickshell issues
+        "TheQtCompany.qt-qml" # QML language support, Quickshell issues
         "TheQtCompany.qt-cpp" # Qt C++ support
         "TheQtCompany.qt-ui" # .ui file designer
 
@@ -128,6 +128,8 @@
         };
         "qt-qml.doNotAskForQmllsDownload" = true;
         "kilo-code.debug" = false;
+        "qt-qml.qmlls.enabled" = false;
+
       };
     };
 

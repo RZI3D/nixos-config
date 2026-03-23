@@ -124,7 +124,7 @@ in
 
       time = {
         disabled = false; # Changed from true
-        format = "[](bold fg:purple)[$time](bg:purple fg:black)[](bold fg:purple) ";
+        format = "[](bold fg:purple)[ $time](bg:purple fg:black)[](bold fg:purple) ";
         time_format = "%l:%M %p";
       };
 
@@ -205,7 +205,7 @@ in
     enable = true;
     settings = {
       env = [
-        "QT_QPA_PLATFORMTHEME,kde2"
+        "QT_QPA_PLATFORMTHEME,kde"
         "QT_STYLE_OVERRIDE,kvantum"
       ];
       monitor = ",preferred,auto,1";
