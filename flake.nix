@@ -14,14 +14,14 @@
       url = "github:nix-community/nix4vscode";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    quickshell = {
-      url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     catppuccin = {
       url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    rzi-shell = {
+      url = "github:rzi3d/rzi-shell";
     };
   };
 
@@ -32,7 +32,7 @@
       home-manager,
       caelestia-shell,
       nix4vscode,
-      quickshell,
+      rzi-shell,
       catppuccin,
       ...
     }@inputs:
@@ -83,8 +83,9 @@
         ];
         homeModules = [
           catppuccin.homeModules.catppuccin
+          # rzi-shell.homeManagerModules.default #TODO: Enable when my config is stable
           ./modules/desktop/rzi-hypr.nix
-          ./modules/devtools/common.nix
+          ./modules/devtools
           ./modules/productivity
           ./modules/entertainment/games.nix
         ];

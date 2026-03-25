@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "NixOS Rebuild & Switch (RZI-Hypr)",
+            "type": "shell",
+            "command": "sudo nixos-rebuild switch --flake .#rzi-hypr",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": false,      // Don't wipe the previous output/session
+                "showReuseMessage": false,
+                "close": false
+            }
+        }
+    ]
+}

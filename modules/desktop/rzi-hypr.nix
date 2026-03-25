@@ -13,12 +13,12 @@ in
 {
   # ── Catppuccin global theme ─────────────────────────────────────────────────
   catppuccin.flavor = "mocha";
-  catppuccin.accent = "mauve";
+  catppuccin.accent = "sapphire";
   catppuccin.enable = true;
   # ── Packages ─────────────────────────────────────────────────────────────────
   home.packages = with pkgs; [
     quickshell
-    (callPackage ../../pkgs/rzi-shell { })
+    # (callPackage ../../pkgs/rzi-shell { }) #TODO: When shell becomes stable, make into a nix flake on github and add it here
 
     # Wallpaper
     swww
@@ -34,7 +34,7 @@ in
     # Screenshot
     grimblast
     wl-clipboard
-
+    cava
     # Utility
     libnotify # notify-send (for testing notifications)
     kdePackages.breeze-icons
@@ -207,6 +207,7 @@ in
       env = [
         "QT_QPA_PLATFORMTHEME,kde"
         "QT_STYLE_OVERRIDE,kvantum"
+        "QT_QUICK_CONTROLS_STYLE,Material"
       ];
       monitor = ",preferred,auto,1";
 
@@ -220,7 +221,7 @@ in
         gaps_in = 5;
         gaps_out = 12;
         border_size = 2;
-        "col.active_border" = "rgb(cba6f7) rgb(89b4fa) 45deg"; # mauve → blue
+        "col.active_border" = "rgb(209fb5) rgb(1e66f5) 45deg"; # mauve → blue
         "col.inactive_border" = "rgb(313244)";
         layout = "dwindle";
       };
@@ -289,6 +290,7 @@ in
       bind = [
         "$mod, Space, exec, quickshell ipc -c rzi call launcher toggleLauncher"
         "$mod, Return, exec, kitty"
+        "$mod, E, exec, dolphin"
         "$mod, Q, killactive"
         "$mod, F, fullscreen"
         "$mod, V, togglefloating"
@@ -351,14 +353,5 @@ in
         "3, swipe, move"
       ];
     };
-  };
-
-  # ── rzi-shell: deploy QML package → ~/.config/quickshell/rzi/ ────────────
-  # Build: nix build .#rzi-shell
-  # Launch: quickshell -p rzi  (configured in exec-once above)
-
-  xdg.configFile."quickshell/rzi" = {
-    source = pkgs.callPackage ../../pkgs/rzi-shell { };
-    recursive = true; # symlink files individually so HM can merge the dir
   };
 }

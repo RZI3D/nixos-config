@@ -3,9 +3,8 @@
   home.packages = with pkgs; [
     # File Management
     yazi
-    thunar
+    kdePackages.dolphin
     kdePackages.ark # archives (zip, tar, etc)
-    tumbler # thumbnail support for thunar
     eza
 
     # Text Editing

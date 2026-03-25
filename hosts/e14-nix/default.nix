@@ -19,7 +19,6 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.configurationLimit = 5;
-  # boot.loader.systemd-boot.uki.enable = true;
   networking.hostName = "z-e14-nix"; # Define your hostname.
   nix.settings.experimental-features = [
     "nix-command"
@@ -37,7 +36,7 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
+  i18n.defaultLocale = "en_US.UTF-8";
   # console = {
   #   font = "Lat2-Terminus16";
   #   keyMap = "us";
@@ -57,17 +56,18 @@
   # Enable sound.
   # services.pulseaudio.enable = true;
   # OR
-  # services.pipewire = {
-  #   enable = true;
-  #   pulse.enable = true;
-  # };
+  services.pipewire = {
+    enable = true;
+    pulse.enable = true;
+  };
 
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.libinput.enable = true;
+  services.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.zackariyyasattaur = {
     isNormalUser = true;
+    description = "Zackariyya Sattaur";
     extraGroups = [
       "wheel"
       "networkmanager"
@@ -81,6 +81,7 @@
   # Enable SDDM and Hyprland
   services.displayManager.sddm.enable = true;
   services.displayManager.sddm.wayland.enable = true;
+  services.displayManager.sddm.theme = "catppuccin-mocha";
   programs.hyprland.enable = true;
 
   services.upower.enable = true; # Battery info
@@ -107,13 +108,13 @@
     git
     python3 # Used for various scripts
     kdePackages.plasma-workspace-wallpapers
+    catppuccin-sddm
+
     # Desktop Components
     swww # Wallpaper daemon
-    pywal # Often used as a fallback for colors
     brightnessctl # Backlight control
     wl-clipboard # Copy/Paste
     libwebp # For image processing
-    fish
     # Audio/Media
     wireplumber
     playerctl

@@ -1,2 +1,0 @@
-module theme
-singleton Catppuccin 1.0 Catppuccin.qml

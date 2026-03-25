@@ -19,7 +19,7 @@ let
         extensions.force = true;
         userChrome = ''
           @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
-
+          @namespace html url("http://www.w3.org/1999/xhtml");
           browser {
             margin-right: 0px; margin-bottom: 0px;
           }
@@ -32,6 +32,17 @@ let
             margin-top: 0;
             margin-bottom: -42px;
             z-index: -100;
+          }
+
+          html|moz-urlbar {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transition: opacity 0.15s ease !important;
+          }
+
+          html|moz-urlbar:focus-within {
+            opacity: 1 !important;
+            pointer-events: auto !important;
           }
 
           #main-window[windowtype="navigator:browser"] {

@@ -59,6 +59,7 @@
         # Appearance & UI
         "catppuccin.catppuccin-vsc"
         "oderwat.indent-rainbow"
+        "Gruntfuggly.todo-tree"
 
         # Languages & Tools
         "charliermarsh.ruff"
@@ -105,10 +106,11 @@
         "jnoortheen.nix-ide" # Nix Syntax Highlighting
 
         "esbenp.prettier-vscode" # Formatting
+        "alefragnani.Bookmarks"
       ];
 
       userSettings = {
-        "catppuccin.accentColor" = "mauve";
+        "catppuccin.accentColor" = "sapphire";
         "editor.formatOnSave" = true;
         "editor.semanticHighlighting.enabled" = true;
         "password-store" = "kwallet6";
@@ -129,6 +131,7 @@
         "qt-qml.doNotAskForQmllsDownload" = true;
         "kilo-code.debug" = false;
         "qt-qml.qmlls.enabled" = false;
+        "editor.fontFamily" = "'JetBrainsMono Nerd Font', monospace";
 
       };
     };
