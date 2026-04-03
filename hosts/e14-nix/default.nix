@@ -64,6 +64,14 @@
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
 
+  hardware.bluetooth.enable = true;
+  # services.mpris-proxy.enable = true;
+  hardware.bluetooth.settings = {
+    General = {
+      Experimental = true;
+    };
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.zackariyyasattaur = {
     isNormalUser = true;
@@ -79,9 +87,21 @@
   services.xserver.enable = true;
 
   # Enable SDDM and Hyprland
-  services.displayManager.sddm.enable = true;
-  services.displayManager.sddm.wayland.enable = true;
-  services.displayManager.sddm.theme = "catppuccin-mocha";
+
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+    theme = "catppuccin-mocha-mauve";
+    extraPackages = with pkgs.kdePackages; [
+      qt5compat
+      qtdeclarative
+      qtsvg
+    ];
+  };
+  services.desktopManager.plasma6.enable = true;
+  xdg.portal.extraPortals = [
+    pkgs.kdePackages.xdg-desktop-portal-kde
+  ];
   programs.hyprland.enable = true;
 
   services.upower.enable = true; # Battery info
@@ -123,6 +143,33 @@
     kdePackages.kwalletmanager
     kdePackages.kwallet-pam
   ];
+
+  services.qdrant = {
+    enable = true;
+    # Listens on 127.0.0.1 by default.
+    # Set to "0.0.0.0" if you need access from other machines/containers.
+    settings = {
+      service = {
+        host = "127.0.0.1";
+        http_port = 6333;
+        grpc_port = 6334;
+      };
+      storage = {
+        storage_path = "/var/lib/qdrant/storage";
+      };
+    };
+  };
+
+  environment.etc."xdg/menus/applications.menu".text = ''
+    <!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+      "http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd">
+    <Menu>
+      <Name>Applications</Name>
+      <DefaultAppDirs/>
+      <DefaultDirectoryDirs/>
+      <DefaultMergeDirs/>
+    </Menu>
+  '';
 
   services.dbus.packages = [ pkgs.kdePackages.kwallet ];
   # Some programs need SUID wrappers, can be configured further or are

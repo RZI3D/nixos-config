@@ -8,5 +8,6 @@
     ./office.nix
     ./notekeeping.nix
     ./creative.nix
+    ./communication.nix
   ];
 }

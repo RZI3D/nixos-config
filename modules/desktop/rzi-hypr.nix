@@ -8,6 +8,10 @@
 let
   colloid-catppuccin = pkgs.callPackage ../../pkgs/colloid-catppuccin { };
   themeName = "Colloid-Dark-Catppuccin";
+  kdeMochaLookAndFeel = pkgs.fetchzip {
+    url = "https://github.com/catppuccin/kde/releases/download/v0.2.6/Mocha-color-schemes.tar.gz";
+    sha256 = "sha256-I5WIXubfArLsrELLdWvuN66VsQ3dr7PzxYBlzz9qBBI="; # If switch fails, use the hash Nix provides
+  };
 in
 
 {
@@ -17,7 +21,7 @@ in
   catppuccin.enable = true;
   # ── Packages ─────────────────────────────────────────────────────────────────
   home.packages = with pkgs; [
-    quickshell
+    inputs.quickshell.packages.${stdenv.hostPlatform.system}.default
     # (callPackage ../../pkgs/rzi-shell { }) #TODO: When shell becomes stable, make into a nix flake on github and add it here
 
     # Wallpaper
@@ -38,9 +42,15 @@ in
     # Utility
     libnotify # notify-send (for testing notifications)
     kdePackages.breeze-icons
-    kdePackages.qtstyleplugin-kvantum
+    #kdePackages.qtstyleplugin-kvantum
     kdePackages.kservice
     kdePackages.qtsvg
+    kdePackages.kservice
+    libsForQt5.qt5ct
+    kdePackages.kio-extras
+    qt6Packages.qt6ct # has unfixed issues with kde, so i needed to patch it (see flake.nix)
+    desktop-file-utils
+    xdg-utils
   ];
 
   # ── Kitty & terminal (Catppuccin via HM module) ────────────────────────────────
@@ -74,7 +84,8 @@ in
       clear = "printf '\\033[2J\\033[3J\\033[1;1H'";
       ls = "eza --icons";
       pamcan = "pacman";
-      q = "qs -c ii";
+      q = "qs -c rzi kill; qs -c rzi";
+      qd = "qs -c rzi kill; qs -c rzi -d";
     };
   };
 
@@ -84,7 +95,6 @@ in
     settings = {
       add_newline = false;
 
-      # The prompt layout from the repo
       format = ''
         $time$cmd_duration 󰜥 $directory $git_branch
         $character'';
@@ -139,22 +149,209 @@ in
 
   # ── GTK & QT theming ──────────────────────────────────────────────────────────────
 
-  catppuccin.kvantum = {
+  catppuccin.qt5ct.enable = false;
+  catppuccin.kvantum.enable = false;
+  qt = {
+    style.package = with pkgs; [
+      darkly-qt5
+      darkly
+    ];
     enable = true;
-    flavor = "mocha";
-    accent = "mauve";
+    platformTheme.name = "qt6ct";
   };
 
-  qt = {
-    enable = true;
-    platformTheme.name = "kde";
-    style.name = "kvantum";
-  };
+  xdg.configFile."qt5ct/colors/catppuccin-mocha-sapphire.conf".text = ''
+    [ColorScheme]
+    active_colors=  #ffcdd6f4,     #ff45475a, #ff585b70, #ff313244, #ff11111b, #ff181825, #ffcdd6f4,     #ffcdd6f4,  #ffcdd6f4,     #ff1e1e2e, #ff181825, #ff11111b, #ff74c7ec, #ff11111b,    #ff89b4fa,     #ffb4befe,   #ff181825, #ffffffff, #ff1e1e2e, #ffcdd6f4, #806c7086, #ff74c7ec
+    inactive_colors=#ff7f849c, #ff1e1e2e,     #ff45475a, #ff313244, #ff11111b, #ff181825, #ff7f849c, #ffcdd6f4,  #ff7f849c, #ff1e1e2e, #ff181825, #ff11111b, #ff313244,              #ff7f849c, #ff7f849c, #ff7f849c,   #ff181825, #ffffffff, #ff1e1e2e, #ffcdd6f4, #806c7086, #ff313244
+    disabled_colors=#ff6c7086, #ff313244, #ff45475a, #ff313244, #ff11111b, #ff181825, #ff6c7086, #ffcdd6f4,  #ff6c7086, #ff1e1e2e, #ff181825, #ff11111b, #ff181825,                #ff6c7086, #ffa9bcdb,   #ffc7cceb, #ff181825, #ffffffff, #ff1e1e2e, #ffcdd6f4, #806c7086, #ff181825
+  '';
+
+  xdg.configFile."qt6ct/colors/catppuccin-mocha-sapphire.conf".text = ''
+    [ColorScheme]
+    active_colors=  #ffcdd6f4,     #ff45475a, #ff585b70, #ff313244, #ff11111b, #ff181825, #ffcdd6f4,     #ffcdd6f4,  #ffcdd6f4,     #ff1e1e2e, #ff181825, #ff11111b, #ff74c7ec, #ff11111b,    #ff89b4fa,     #ffb4befe,   #ff181825, #ffffffff, #ff1e1e2e, #ffcdd6f4, #806c7086, #ff74c7ec
+    inactive_colors=#ff7f849c, #ff1e1e2e,     #ff45475a, #ff313244, #ff11111b, #ff181825, #ff7f849c, #ffcdd6f4,  #ff7f849c, #ff1e1e2e, #ff181825, #ff11111b, #ff313244,              #ff7f849c, #ff7f849c, #ff7f849c,   #ff181825, #ffffffff, #ff1e1e2e, #ffcdd6f4, #806c7086, #ff313244
+    disabled_colors=#ff6c7086, #ff313244, #ff45475a, #ff313244, #ff11111b, #ff181825, #ff6c7086, #ffcdd6f4,  #ff6c7086, #ff1e1e2e, #ff181825, #ff11111b, #ff181825,                #ff6c7086, #ffa9bcdb,   #ffc7cceb, #ff181825, #ffffffff, #ff1e1e2e, #ffcdd6f4, #806c7086, #ff181825
+  '';
+
+  xdg.configFile."qt5ct/qt5ct.conf".text = ''
+    [Appearance]
+    color_scheme_path=${config.xdg.configHome}/qt5ct/colors/catppuccin-mocha-sapphire.conf
+    custom_palette=true
+    icon_theme=Papirus-Dark
+    standard_dialogs=default
+    style=Darkly
+    [Fonts]
+    general=JetBrainsMono Nerd Font,11,-1,5,50,0,0,0,0,0
+    fixed=JetBrainsMono Nerd Font,11,-1,5,50,0,0,0,0,0
+  '';
+
+  xdg.configFile."qt6ct/qt6ct.conf".text = ''
+    [Appearance]
+    color_scheme_path=${config.xdg.configHome}/qt6ct/colors/catppuccin-mocha-sapphire.conf
+    custom_palette=true
+    icon_theme=Papirus-Dark
+    standard_dialogs=default
+    style=Darkly
+    [Fonts]
+    general=JetBrainsMono Nerd Font,11,-1,5,50,0,0,0,0,0
+    fixed=JetBrainsMono Nerd Font,11,-1,5,50,0,0,0,0,0
+  '';
 
   xdg.configFile."kdeglobals".text = ''
+    [General]
+    TerminalApplication=kitty
+    TerminalService=kitty.desktop
+
+    [ColorEffects:Disabled]
+    ChangeSelectionColor=
+    Color=30, 30, 46
+    ColorAmount=0.30000000000000004
+    ColorEffect=2
+    ContrastAmount=0.1
+    ContrastEffect=0
+    Enable=
+    IntensityAmount=-1
+    IntensityEffect=0
+
+    [ColorEffects:Inactive]
+    ChangeSelectionColor=true
+    Color=30, 30, 46
+    ColorAmount=0.5
+    ColorEffect=3
+    ContrastAmount=0
+    ContrastEffect=0
+    Enable=true
+    IntensityAmount=0
+    IntensityEffect=0
+
+    [Colors:Button]
+    BackgroundAlternate=116,199,236
+    BackgroundNormal=49, 50, 68
+    DecorationFocus=116,199,236
+    DecorationHover=49, 50, 68
+    ForegroundActive=250, 179, 135
+    ForegroundInactive=166, 173, 200
+    ForegroundLink=116,199,236
+    ForegroundNegative=243, 139, 168
+    ForegroundNeutral=249, 226, 175
+    ForegroundNormal=205, 214, 244
+    ForegroundPositive=166, 227, 161
+    ForegroundVisited=203, 166, 247
+
+    [Colors:Complementary]
+    BackgroundAlternate=17, 17, 27
+    BackgroundNormal=24, 24, 37
+    DecorationFocus=116,199,236
+    DecorationHover=49, 50, 68
+    ForegroundActive=250, 179, 135
+    ForegroundInactive=166, 173, 200
+    ForegroundLink=116,199,236
+    ForegroundNegative=243, 139, 168
+    ForegroundNeutral=249, 226, 175
+    ForegroundNormal=205, 214, 244
+    ForegroundPositive=166, 227, 161
+    ForegroundVisited=203, 166, 247
+
+    [Colors:Header]
+    BackgroundAlternate=17, 17, 27
+    BackgroundNormal=24, 24, 37
+    DecorationFocus=116,199,236
+    DecorationHover=49, 50, 68
+    ForegroundActive=250, 179, 135
+    ForegroundInactive=166, 173, 200
+    ForegroundLink=116,199,236
+    ForegroundNegative=243, 139, 168
+    ForegroundNeutral=249, 226, 175
+    ForegroundNormal=205, 214, 244
+    ForegroundPositive=166, 227, 161
+    ForegroundVisited=203, 166, 247
+
+    [Colors:Selection]
+    BackgroundAlternate=116,199,236
+    BackgroundNormal=116,199,236
+    DecorationFocus=116,199,236
+    DecorationHover=49, 50, 68
+    ForegroundActive=250, 179, 135
+    ForegroundInactive=24, 24, 37
+    ForegroundLink=116,199,236
+    ForegroundNegative=243, 139, 168
+    ForegroundNeutral=249, 226, 175
+    ForegroundNormal=17, 17, 27
+    ForegroundPositive=166, 227, 161
+    ForegroundVisited=203, 166, 247
+
+    [Colors:Tooltip]
+    BackgroundAlternate=27,25,35
+    BackgroundNormal=30, 30, 46
+    DecorationFocus=116,199,236
+    DecorationHover=49, 50, 68
+    ForegroundActive=250, 179, 135
+    ForegroundInactive=166, 173, 200
+    ForegroundLink=116,199,236
+    ForegroundNegative=243, 139, 168
+    ForegroundNeutral=249, 226, 175
+    ForegroundNormal=205, 214, 244
+    ForegroundPositive=166, 227, 161
+    ForegroundVisited=203, 166, 247
+
+    [Colors:View]
+    BackgroundAlternate=24, 24, 37
+    BackgroundNormal=30, 30, 46
+    DecorationFocus=116,199,236
+    DecorationHover=49, 50, 68
+    ForegroundActive=250, 179, 135
+    ForegroundInactive=166, 173, 200
+    ForegroundLink=116,199,236
+    ForegroundNegative=243, 139, 168
+    ForegroundNeutral=249, 226, 175
+    ForegroundNormal=205, 214, 244
+    ForegroundPositive=166, 227, 161
+    ForegroundVisited=203, 166, 247
+
+    [Colors:Window]
+    BackgroundAlternate=17, 17, 27
+    BackgroundNormal=24, 24, 37
+    DecorationFocus=116,199,236
+    DecorationHover=49, 50, 68
+    ForegroundActive=250, 179, 135
+    ForegroundInactive=166, 173, 200
+    ForegroundLink=116,199,236
+    ForegroundNegative=243, 139, 168
+    ForegroundNeutral=249, 226, 175
+    ForegroundNormal=205, 214, 244
+    ForegroundPositive=166, 227, 161
+    ForegroundVisited=203, 166, 247
+
+    [General]
+    ColorScheme=CatppuccinMochaSapphire
+
+    [KDE]
+    contrast=4
+    frameContrast=0.2
+
+    [WM]
+    activeBackground=30,30,46
+    activeBlend=205,214,244
+    activeForeground=205,214,244
+    inactiveBackground=17,17,27
+    inactiveBlend=166,173,200
+    inactiveForeground=166,173,200
+
+
     [Icons]
     Theme=Papirus-Dark
   '';
+
+  xdg.dataFile."color-schemes/CatppuccinMochaSapphire.colors".source =
+    "${kdeMochaLookAndFeel}/CatppuccinMochaSapphire.colors";
+
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+      gtk-theme = "Colloid-Dark-Catppuccin";
+    };
+  };
 
   # GTK
   gtk = {
@@ -175,6 +372,19 @@ in
     };
   };
 
+  xdg.userDirs = {
+    enable = true;
+    createDirectories = true;
+    desktop = "${config.home.homeDirectory}/Desktop";
+    documents = "${config.home.homeDirectory}/Documents";
+    download = "${config.home.homeDirectory}/Downloads";
+    music = "${config.home.homeDirectory}/Music";
+    pictures = "${config.home.homeDirectory}/Pictures";
+    videos = "${config.home.homeDirectory}/Videos";
+    templates = "${config.home.homeDirectory}/Templates";
+    publicShare = "${config.home.homeDirectory}/Public";
+  };
+
   dconf.enable = true;
 
   # gtk.iconTheme = {
@@ -182,13 +392,6 @@ in
   #   package = pkgs.papirus-icon-theme;
   # };
 
-  gtk.gtk3.extraConfig = {
-    gtk-fallback-icon-theme = "Adwaita";
-  };
-
-  gtk.gtk4.extraConfig = {
-    gtk-fallback-icon-theme = "Adwaita";
-  };
   gtk.gtk4.theme = config.gtk.theme;
   catppuccin.firefox.enable = true;
 
@@ -205,9 +408,7 @@ in
     enable = true;
     settings = {
       env = [
-        "QT_QPA_PLATFORMTHEME,kde"
-        "QT_STYLE_OVERRIDE,kvantum"
-        "QT_QUICK_CONTROLS_STYLE,Material"
+        "QT_QPA_PLATFORMTHEME,qt6ct"
       ];
       monitor = ",preferred,auto,1";
 
@@ -215,6 +416,8 @@ in
         "swww-daemon"
         "quickshell -c rzi"
         "kwalletd6"
+        "kbuildsycoca6"
+        "update-desktop-database ~/.local/share/applications/"
       ];
 
       general = {
@@ -274,10 +477,14 @@ in
       };
 
       # Allow quickshell layers to blur properly
-      #      layerrule = [
-      #        "match:namespace quickshell, blur on"
-      #        "match:namespace quickshell, ignore_alpha 0.5"
-      #      ];
+      layerrule = [
+        # "match:namespace quickshell, blur on"
+        # "match:namespace quickshell, ignore_alpha 0.5"
+        "match:namespace quickshell:overlay, blur on"
+        "match:namespace quickshell:overlay, ignore_alpha 0.1"
+        "match:namespace quickshell:background_dim, blur on"
+        "match:namespace quickshell:background_dim, ignore_alpha 0.1"
+      ];
 
       windowrule = [
         "match:class pavucontrol, float on"

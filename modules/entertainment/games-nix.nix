@@ -31,6 +31,11 @@
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
-    extraPackages = with pkgs; [ vulkan-validation-layers ];
+    extraPackages = with pkgs; [
+      vulkan-validation-layers
+      intel-media-driver
+      libva-vdpau-driver
+      libvdpau-va-gl
+    ];
   };
 }

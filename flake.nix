@@ -23,6 +23,13 @@
     rzi-shell = {
       url = "github:rzi3d/rzi-shell";
     };
+
+    quickshell = {
+      url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    dolphin-overlay.url = "github:rumboon/dolphin-overlay";
+
   };
 
   outputs =
@@ -34,6 +41,8 @@
       nix4vscode,
       rzi-shell,
       catppuccin,
+      quickshell,
+      dolphin-overlay,
       ...
     }@inputs:
     let
@@ -48,7 +57,15 @@
           modules = [
             ./hosts/e14-nix/default.nix
             {
-              nixpkgs.overlays = [ nix4vscode.overlays.default ];
+              nixpkgs.overlays = [
+                nix4vscode.overlays.default
+                #dolphin-overlay.overlays.default
+                (final: prev: {
+                  qt6Packages = prev.qt6Packages // {
+                    qt6ct = prev.callPackage ./pkgs/qt6ct-kde { pkgs = prev; };
+                  };
+                })
+              ];
               nixpkgs.config.allowUnfree = true;
             }
             home-manager.nixosModules.home-manager
@@ -56,6 +73,7 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.backupFileExtension = ".bkp";
               home-manager.users.zackariyyasattaur = {
                 home.username = "zackariyyasattaur";
                 home.homeDirectory = "/home/zackariyyasattaur";

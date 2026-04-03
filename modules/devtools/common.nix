@@ -9,6 +9,7 @@
     nil # Nix Language Server
     nixfmt # Official Nix Formatter
     qt6.qtdeclarative
+    kdePackages.qttools
   ];
 
   # Git Configuration
@@ -107,6 +108,9 @@
 
         "esbenp.prettier-vscode" # Formatting
         "alefragnani.Bookmarks"
+
+        "dtoplak.vscode-glsllint"
+        "slevesque.shader"
       ];
 
       userSettings = {
@@ -132,6 +136,10 @@
         "kilo-code.debug" = false;
         "qt-qml.qmlls.enabled" = false;
         "editor.fontFamily" = "'JetBrainsMono Nerd Font', monospace";
+        "terminal.integrated.commandsToSkipShell" = [
+          "kilo-code.new.agentManagerOpen"
+          "kilo-code.new.agentManager.showTerminal"
+        ];
 
       };
     };
